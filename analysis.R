@@ -45,8 +45,37 @@ ggplot(result, aes(
 reslt_acum <- result %>%
   mutate(
     tot = cumsum(value),
-    tot12m = 
+    tot12m = zoo::rollsum(value, k = 12, fill = NA, align = "right"),
+    tot48m = zoo::rollsum(value, k = 48, fill = NA, align = "right")
   )
 
 ggplot(reslt_acum) +
-  geom_line(aes(x = Date, y = value))
+  geom_line(aes(x = Date, y = value)) +
+  geom_line(aes(x = Date, y = tot12m), color = "blue") +
+  geom_line(aes(x = Date, y = tot), color = "red") +
+  geom_line(aes(x = Date, y = tot48m), color = "green")
+
+
+ggplot(reslt_acum) +
+  #geom_area(aes(x = Date, y = tot, color = tot > 0)) +
+  #geom_ribbon(aes(x = Date, ymin = 0, ymax = ifelse(tot > 0, tot, 0)), fill = "steelblue") +
+  #geom_ribbon(aes(x = Date, ymax = 0, ymin = ifelse(tot <= 0, tot, 0)), fill = "firebrick") +
+  geom_col(aes(x = Date, y = ifelse(tot12m > 0, tot12m, 0)), fill = "blue") + 
+  geom_col(aes(x = Date, y = ifelse(tot12m <= 0, tot12m, 0)), fill = "red") + 
+  #linerange fica legal tb
+  scale_x_date(date_breaks = "2 years", date_labels = "%Y") +
+  labs(x = NULL, y = NULL, title = "Resultado primário acumulado (trilhões de R$") +
+  scale_y_continuous(labels = function(x) {format(x/1000000, big.mark = ".", decimal.mark = ",")})
+
+
+ggplot(reslt_acum) +
+  #geom_area(aes(x = Date, y = tot, color = tot > 0)) +
+  #geom_ribbon(aes(x = Date, ymin = 0, ymax = ifelse(tot > 0, tot, 0)), fill = "steelblue") +
+  #geom_ribbon(aes(x = Date, ymax = 0, ymin = ifelse(tot <= 0, tot, 0)), fill = "firebrick") +
+  geom_col(aes(x = Date, y = ifelse(value > 0, value, 0)), fill = "blue") + 
+  geom_col(aes(x = Date, y = ifelse(value <= 0, value, 0)), fill = "red") + 
+  geom_line(aes(x = Date, y = tot12m, color = tot12m > 0, group = 1)) + #sem o group = 1 ele divide a linha
+  #geom_ribbon(aes(x = Date, ymax = 0, ymin = ifelse(tot <= 0, tot, 0)), fill = "firebrick") +
+  scale_x_date(date_breaks = "2 years", date_labels = "%Y") +
+  labs(x = NULL, y = NULL, title = "Resultado primário acumulado (trilhões de R$") +
+  scale_y_continuous(labels = function(x) {format(x/1000000, big.mark = ".", decimal.mark = ",")})
