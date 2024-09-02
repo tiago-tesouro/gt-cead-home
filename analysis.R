@@ -32,6 +32,12 @@ ggplot(result, aes(x = Date, y = value)) +
   geom_line() +
   theme_minimal()
 
+
+result_scaled <- (result$value - min(result$value)) / (max(result$value) - min(result$value))
+
+jsonlite::write_json(result_scaled, "result.json")
+
+
 ggplot(result, aes(x = Date, y = value)) +
   geom_col() +
   geom_point() +
@@ -112,7 +118,9 @@ ggplot(reslt_acum %>% filter(Date <= as.Date("2023-12-31"))) +
   theme(
     text = element_text(family = "Work Sans"),
     panel.grid.minor = element_blank(),
-    panel.grid.major.x = element_blank())
+    panel.grid.major.x = element_blank(),
+    plot.title = element_text(face = "bold"),
+    plot.caption = element_text(face = "italic"))
 
 ggsave("acumulado.png", width = 8.5, height = 5, bg = "white")
 
