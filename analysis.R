@@ -26,6 +26,11 @@ ggplot(result, aes(x = Date, y = value,
   geom_col() +
   theme_minimal()
 
+# resultado mes a mes
+ggplot(result, aes(x = Date, y = value)) +
+  geom_line() +
+  theme_minimal()
+
 ggplot(result, aes(x = year, y = month_name, fill = -value))+
                    #fill = value > 0, alpha = abs(value))) +
   geom_tile(color = "white") +
@@ -55,6 +60,13 @@ ggplot(reslt_acum) +
   geom_line(aes(x = Date, y = tot), color = "red") +
   geom_line(aes(x = Date, y = tot48m), color = "green")
 
+ggplot(reslt_acum) +
+  geom_ribbon(aes(x = Date, ymin = 0, ymax = ifelse(tot > 0, tot, 0)), fill = "steelblue") +
+  geom_ribbon(aes(x = Date, ymax = 0, ymin = ifelse(tot <= 0, tot, 0)), fill = "firebrick") +
+  scale_x_date(date_breaks = "2 years", date_labels = "%Y") +
+  labs(x = NULL, y = NULL, title = "Resultado primário acumulado (trilhões de R$, IPCA)") +
+  scale_y_continuous(labels = function(x) {format(x/1000000, big.mark = ".", decimal.mark = ",")}) +
+  theme_bw()
 
 ggplot(reslt_acum) +
   #geom_area(aes(x = Date, y = tot, color = tot > 0)) +
