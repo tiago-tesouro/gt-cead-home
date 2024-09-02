@@ -27,13 +27,17 @@ fetch("result.json").then(result => result.json()).then(data => {
 
     }
 
+    const y0 = y(data[0]);
+
     const points = data.map( (d,i) => {
 
         return {
 
             x0: x(i),
-            y0: y(0),
-            yf: y(d)
+            y0: y0,
+            yf: y(d),
+
+            current_y: y0
 
         }
 
@@ -43,17 +47,45 @@ fetch("result.json").then(result => result.json()).then(data => {
 
     ctx.strokeStyle = "#333333";
     ctx.globalAlpha = 0.5;
-    ctx.beginPath();
-    ctx.moveTo(x(0), y(data[0]));
+
+    function draw_curve() {
+
+        ctx.clearRect(0,0,w,h);
+
+        ctx.beginPath();
+        ctx.moveTo(x(0), y0);
+        
+        points.forEach( (p,i) => {
     
-    data.forEach( (d,i) => {
+            ctx.lineTo( p.x0, p.current_y );
+            //ctx.arc(x(i), y(d), 1, 0, Math.PI * 2);
+    
+        })
+    
+        ctx.stroke();
+        ctx.closePath();
 
-        ctx.lineTo( x(i), y(d) );
-        ctx.arc(x(i), y(d), 1, 0, Math.PI * 2);
+    }
 
-    })
+    draw_curve();
 
-    ctx.stroke();
-    ctx.closePath();
+    //points.forEach(d => d.current_y = d.yf);
+
+    gsap.to(
+        points, {
+            current_y : (i, target) => target.yf,
+            //duration: 3,
+            stagger: 0.01,
+            onUpdate : draw_curve,
+            yoyo: true,
+            repeat: 5,
+            ease: "elastic.out(1,0.3)"
+        }
+    )
+
+    
+
+
+
 
 })
