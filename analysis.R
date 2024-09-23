@@ -199,3 +199,5 @@ ggplot(reslt_acum_pib) +
   labs(x = NULL, y = NULL, title = "Resultado primário acumulado (trilhões de R$, IPCA)") +
   scale_y_continuous(labels = scales::percent) +
   theme_bw()
+
+

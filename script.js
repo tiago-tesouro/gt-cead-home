@@ -1,161 +1,152 @@
 const cv = document.querySelector("canvas");
 const ctx = cv.getContext("2d");
-const h = + window.getComputedStyle(cv).height.slice(0, -2);
-const w = + window.getComputedStyle(cv).width.slice(0, -2);
 
-cv.height = h;
-cv.width = w;
+cv.width = window.innerWidth;
+cv.height = window.innerHeight;
 
-const margin = 10;
-const margin_v = h * 0.2;
+class Symbol {
 
-fetch("result.json").then(result => result.json()).then(data => {
+    constructor(i, j, fontSize, canvasHeight, context) {
 
-    console.log(data);
+        this.characters = '0123456789';
 
-    const n = data.length;
+        this.i = i;
+        this.j = j;
+        this.context = context;
+        this.fontSize = fontSize;
+        this.context.font = fontSize + 'px monospace'; // monospace so all characters use the same space
+        this.canvasHeight = canvasHeight;
 
-    function x(i) {
+        this.text = '';
+        this.color = "gray";
 
-        return margin + ( w - 2 * margin) * i / (n - 1);
+        
+    }
+
+    draw() {
+
+        const pos = Math.floor(Math.random() * this.characters.length);
+
+        this.text = this.characters.charAt(pos);
+
+        const x = this.i * this.fontSize;
+        const y = this.j * this.fontSize;
+
+        if (this.i == 20 && this.j == 5) { 
+            this.color = "pink";
+        } else {
+            this.color = "gray";
+        }
+
+        this.context.fillStyle = this.color;
+
+        this.context.fillText(
+            this.text,
+            x, y
+        )
+
+        if (y > this.canvasHeight && Math.random() > 0.98) { // the second term to randomize when the column is reset
+            this.j = 0;
+        } else {
+            this.j++;
+        }
+
+        //if (this.i == 20 || this.i == 21) {this.context.fillStyle = "pink"};
+
 
     }
 
-    function y(d) {
+}
 
-        return h - (margin_v + ( h - 2 * margin_v) * d);
+class Effect {
+
+    constructor(canvasWidth, canvasHeight) {
+
+        this.canvasHeight = canvasHeight;
+        this.canvasWidth = canvasWidth;
+        this.fontSize = 25;
+        this.columns = this.canvasWidth / this.fontSize;
+        this.symbols = [];
+        this.#initialize();
 
     }
 
-    const y0 = y(data[0]);
+    resize(canvasWidth, canvasHeight) {
 
-    const points = data.map( (d,i) => {
+        this.canvasHeight = canvasHeight;
+        this.canvasWidth = canvasWidth;
+        this.columns = this.canvasWidth / this.fontSize;
+        this.symbols = [];
+        this.#initialize();
 
-        return {
+    }
 
-            x0: x(i),
-            y0: y0,
-            yf: y(d),
+    #initialize() {
 
-            current_y: y0,
-            alpha : 0
+        // private method
+
+        for (let i = 0; i < this.columns; i++) {
+            
+            this.symbols[i] = new Symbol(i, 0, this.fontSize, this.canvasHeight, ctx);
+            
 
         }
 
-    })
-
-    console.log(points);
-
-    ctx.strokeStyle = "#333333";
-    ctx.globalAlpha = 0;
-
-    const gradient1 = ctx.createLinearGradient(w/2, y0, w/2, 0);
-    const gradient2 = ctx.createLinearGradient(w/2, h, w/2, y0);
-
-    gradient1.addColorStop(0, "#ccc");
-    gradient1.addColorStop(1, "white");
-    gradient2.addColorStop(0, "white");
-    gradient2.addColorStop(1, "#ccc");
-    ctx.lineWidth = 2;
-
-    function draw() {
-        ctx.clearRect(0,0,w,h);
-        draw_rect1();
-        draw_rect2();
-    }
-
-    function draw_rect1() {
-
-        ctx.beginPath();
-        ctx.moveTo(0,0);
-        ctx.lineTo(0, y0);
-        
-        points.forEach( (p,i) => {
-    
-            ctx.lineTo( p.x0, p.current_y );
-            //ctx.arc(x(i), y(d), 1, 0, Math.PI * 2);
-    
-        })
-    
-        ctx.lineTo(w,y0);
-        ctx.lineTo(w,0);
-        //ctx.lineTo(0,0);
-        ctx.closePath();
-        ctx.fillStyle = gradient1;
-        ctx.globalAlpha = points[0].alpha;
-        ctx.fill();
-        ctx.stroke();
-        //ctx.closePath();
-
-    }
-
-    function draw_rect2() {
-
-        ctx.beginPath();
-        ctx.moveTo(0,h);
-        ctx.lineTo(0, y0);
-        
-        points.forEach( (p,i) => {
-    
-            ctx.lineTo( p.x0, p.current_y );
-            //ctx.arc(x(i), y(d), 1, 0, Math.PI * 2);
-    
-        })
-    
-        ctx.lineTo(w,y0);
-        ctx.lineTo(w,h);
-        ctx.closePath();
-        ctx.fillStyle = gradient2;
-        ctx.globalAlpha = points[0].alpha;
-        ctx.fill();
-        //ctx.stroke();
-        //ctx.closePath();
-
     }
 
 
+}
 
+const effect = new Effect(cv.width, cv.height);
 
-    function draw_curve() {
+let anim;
 
-        ctx.clearRect(0,0,w,h);
+let lastTime = 0;
+let timer = 0;
+const fps = 15;
+const nextFrame = 1000 / fps; // 1000ms/30fps
+console.log(nextFrame);
 
-        ctx.beginPath();
-        ctx.moveTo(x(0), y0);
-        
-        points.forEach( (p,i) => {
-    
-            ctx.lineTo( p.x0, p.current_y );
-            //ctx.arc(x(i), y(d), 1, 0, Math.PI * 2);
-    
-        })
-    
-        ctx.stroke();
-        ctx.closePath();
+function animate(timeStamp) {
+
+    const deltaTime = timeStamp - lastTime;
+
+    lastTime = timeStamp;
+
+    if (timer > nextFrame) {
+
+        ctx.fillStyle = "rgba(255, 255, 255, 0.1)";
+        //ctx.globalAlpha = 0.1
+        ctx.fillRect(0, 0, cv.width, cv.height);
+        //ctx.globalAlpha = 1;
+        //ctx.fillStyle = "gray";
+        effect.symbols.forEach(s => s.draw(ctx));
+        timer = 0;
+
+    } else {
+
+        timer += deltaTime;
 
     }
 
-    draw_curve();
+    anim = requestAnimationFrame(animate); // this creates the animation loop.
 
-    //points.forEach(d => d.current_y = d.yf);
+}
 
-    gsap.to(
-        points, {
-            current_y : (i, target) => target.yf,
-            alpha : 1,
-            //duration: 3,
-            //stagger: 0.01,
-            onUpdate : draw,//draw_curve,
-            yoyo: true,
-            duration: 5,
-            repeat: 5,
-            //ease: "elastic.out(1,0.3)"
-        }
-    )
+animate(0);
 
-    
+// 
 
+window.addEventListener("resize", function() {
+    cv.width = window.innerWidth;
+    cv.height = window.innerHeight;
+    effect.resize(cv.width, cv.height);
+    console.log(cv.width, cv.height);
+})
 
+//
 
-
+const stopBTN = document.querySelector("#btn-stop");
+stopBTN.addEventListener("click", function() {
+    cancelAnimationFrame(anim);
 })
