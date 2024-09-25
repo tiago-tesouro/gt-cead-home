@@ -179,8 +179,6 @@ function mouseMove(e) {
     document.documentElement.style.setProperty('--x', `${mx}px`);
     document.documentElement.style.setProperty('--y', `${my}px`);
 
-    console.log("fire");
-
     /*
     shadow.style.setProperty('--x1', `${dx - d}%`);
     shadow.style.setProperty('--y1', `${dy - d}%`);
