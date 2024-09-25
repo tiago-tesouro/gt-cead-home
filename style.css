@@ -3,12 +3,13 @@
 }
 
 :root {
-    --color-grid: white;
-    --r: 50px;
-    --x: 400px;
-    --y: 300px;
+    --color-grid: ghostwhite;
+    --color-bg-grid: rgba(255, 255, 255, 0.5);
     --l: 25px;
     --l-1 : calc(var(--l) - 1px);
+    --r: 0;
+    --x: 0;
+    --y: 0;
 }
 
 body {
@@ -72,8 +73,10 @@ COVER
 .grid {
     width: 100%;
     height: 100%;
+    border: 0;
+    margin: 0;
     opacity: 1;
-    background-image: repeating-linear-gradient(to right, transparent 0px, transparent 19px, var(--color-grid) 19px, var(--color-grid) 20px), repeating-linear-gradient(to bottom, transparent 0px, transparent 19px, var(--color-grid) 19px, var(--color-grid) 20px);
+    background-image: repeating-linear-gradient(to right, var(--color-bg-grid) 0px, var(--color-bg-grid) var(--l-1), var(--color-grid) var(--l-1), var(--color-grid) var(--l)), repeating-linear-gradient(to bottom, var(--color-bg-grid) 0px, var(--color-bg-grid) var(--l-1), var(--color-grid) var(--l-1), var(--color-grid) var(--l));
 }
 
 .title {

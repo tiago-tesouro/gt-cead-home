@@ -151,3 +151,41 @@ const stopBTN = document.querySelector("#btn-stop");
 stopBTN.addEventListener("click", function() {
     cancelAnimationFrame(anim);
 })*/
+
+const cover = document.querySelector('.cover');
+
+cover.addEventListener('mousemove', mouseMove);
+
+setTimeout(
+    () => {
+        document.documentElement.style.setProperty('--r', '15%');
+    }, 1000
+
+)
+
+cover.addEventListener('mousemove', mouseMove);
+
+function mouseMove(e) {
+
+    const [x, y, width, height] = [0, 0, 1, 1];
+
+    const mx = e.clientX;
+    const my = e.clientY;
+
+    //const dx = Math.round(100 * (mx - x) / width);
+    //const dy = Math.round(100 * (my - y) / height);
+
+    //shadow.style.perspectiveOrigin = `${dx}% ${dy}%`;
+    document.documentElement.style.setProperty('--x', `${mx}px`);
+    document.documentElement.style.setProperty('--y', `${my}px`);
+
+    console.log("fire");
+
+    /*
+    shadow.style.setProperty('--x1', `${dx - d}%`);
+    shadow.style.setProperty('--y1', `${dy - d}%`);
+    shadow.style.setProperty('--x2', `${dx + d}%`);
+    shadow.style.setProperty('--y2', `${dy + d}%`);
+    */
+
+}
