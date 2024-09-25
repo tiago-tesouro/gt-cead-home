@@ -187,3 +187,17 @@ function mouseMove(e) {
     */
 
 }
+
+// palhaçadas
+
+// buzzword
+
+const bw = document.querySelector(".buzzword");
+bw.addEventListener("mouseover", palhacada)
+
+function palhacada(e) {
+    console.log("ha!");
+    const bz = document.querySelector(".buzz");
+
+    bz.innerText = "DATA SCIENCE!!!";
+}

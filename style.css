@@ -166,6 +166,54 @@ COVER
     min-height: 100vh;
     max-width: 620px;
     margin: 0 auto;
-    padding-top: 2rem;
-    padding-bottom: 2rem;
+    padding: 2rem 1rem;
+}
+
+.buzzword {
+    border: 2px solid currentColor;
+    padding: .1em .4em;
+    border-radius: 10px;
+    position: relative;
+}
+
+.buzzword:hover {
+    background-color: khaki;
+}
+
+.buzzword::before {
+    content: "<";
+}
+
+
+.buzzword::after {
+    content: ">";
+}
+
+.buzz {
+
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    left: 0;
+
+}
+
+.buzzword:hover .buzz {
+
+    animation: fly .5s 1;
+
+}
+
+@keyframes fly {
+
+    0% {
+        opacity: 0;
+        transform: rotate(0) translate(0,0);
+    }
+
+    100% {
+        opacity: 1;
+        transform: rotate(-45deg) translate(-10px, -30px);
+    }
+
 }
