@@ -2,6 +2,15 @@
     box-sizing: border-box;
 }
 
+:root {
+    --color-grid: white;
+    --r: 50px;
+    --x: 400px;
+    --y: 300px;
+    --l: 25px;
+    --l-1 : calc(var(--l) - 1px);
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -12,19 +21,59 @@ body {
 .cover {
     width: 100vw;
     height: 100vh;
-    background: linear-gradient(ghostwhite, whitesmoke);
+    /*background: linear-gradient(ghostwhite, whitesmoke);*/
     position: relative;
+    top: 0;
+    left: 0;
     margin: 0;
     padding: 0;
 }
 
-canvas {
+canvas, .background-image, .logo, .grid {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
+}
+
+canvas {
     background-color: white;
+}
+
+/*
+
+COVER
+
+*/
+
+.background-image {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    --clip: circle(var(--r) at var(--x) var(--y));
+    -webkit-clip-path: var(--clip);
+    clip-path: var(--clip);
+}
+
+.logo {
+    width: 100%;
+    height: 100%;
+}
+
+.logo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    opacity: 1;
+}
+
+.grid {
+    width: 100%;
+    height: 100%;
+    opacity: 1;
+    background-image: repeating-linear-gradient(to right, transparent 0px, transparent 19px, var(--color-grid) 19px, var(--color-grid) 20px), repeating-linear-gradient(to bottom, transparent 0px, transparent 19px, var(--color-grid) 19px, var(--color-grid) 20px);
 }
 
 .title {

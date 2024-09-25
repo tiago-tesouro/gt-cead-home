@@ -32,11 +32,12 @@ class Symbol {
         const x = this.i * this.fontSize;
         const y = this.j * this.fontSize;
 
+        /*
         if (this.i == 20 && this.j == 5) { 
             this.color = "pink";
         } else {
             this.color = "gray";
-        }
+        }*/
 
         this.context.fillStyle = this.color;
 
