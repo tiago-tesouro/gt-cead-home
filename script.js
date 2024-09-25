@@ -145,8 +145,8 @@ window.addEventListener("resize", function() {
 })
 
 //
-
+/*
 const stopBTN = document.querySelector("#btn-stop");
 stopBTN.addEventListener("click", function() {
     cancelAnimationFrame(anim);
-})
+})*/
