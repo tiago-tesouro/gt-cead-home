@@ -18,7 +18,7 @@ class Symbol {
         this.canvasHeight = canvasHeight;
 
         this.text = '';
-        this.color = "gray";
+        this.color = "rgba(128,128,128,.5)";//"gray";
 
         
     }
