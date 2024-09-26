@@ -163,21 +163,63 @@ COVER
 }
 
 #main {
+
     min-height: 100vh;
-    max-width: 620px;
-    margin: 0 auto;
     padding: 2rem 1rem;
+
+}
+
+#main p, 
+#main h2, 
+#main ul, 
+#main figure,
+.img-contained,
+#main blockquote,
+figcaption {
+    
+    display: block;
+    max-width: 620px;
+    margin-left: auto;
+    margin-right: auto;
+    
+}
+
+blockquote {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    border-left: 3px solid currentColor;
+}
+
+figcaption {
+
+    font-style: italic;
+    font-size: .7em;
+    text-align: right;
+}
+
+.img-contained {
+    border: 2px solid #333;
+    border-radius: 10px;
+}
+
+
+.img-full-bleed {
+    display: block;
+    width: 100%;
 }
 
 .buzzword {
-    border: 2px solid currentColor;
+    border: 2px solid #333;
     padding: .1em .4em;
     border-radius: 10px;
     position: relative;
+    display: block;
+    margin: 1rem auto;
+    width: fit-content;
 }
 
 .buzzword:hover {
-    background-color: khaki;
+    background-color: white;
 }
 
 .buzzword::before {
@@ -195,25 +237,61 @@ COVER
     opacity: 0;
     top: 0;
     left: 0;
+    color: #333;
+    width: 100%;
+    text-align: center;
 
 }
 
-.buzzword:hover .buzz {
-
-    animation: fly .5s 1;
-
+.buzz-left {
+    transform-origin: left center;
 }
 
-@keyframes fly {
+.buzz-right {
+    transform-origin: right center;
+}
+
+.buzzword:hover {
+    color: white;
+}
+
+.buzzword:hover .buzz-left { animation: fly-left .8s 1; }
+.buzzword:hover .buzz-right { animation: fly-right .8s 1; }
+
+@keyframes fly-left {
 
     0% {
         opacity: 0;
         transform: rotate(0) translate(0,0);
     }
 
-    100% {
+    50% {
         opacity: 1;
+        transform: rotate(0) translate(0,0);
+    }
+
+    100% {
+        opacity: 0;
         transform: rotate(-45deg) translate(-10px, -30px);
+    }
+
+}
+
+@keyframes fly-right {
+
+    0% {
+        opacity: 0;
+        transform: rotate(0) translate(0,0);
+    }
+
+    50% {
+        opacity: 1;
+        transform: rotate(0) translate(0,0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: rotate(45deg) translate(10px, -30px);
     }
 
 }

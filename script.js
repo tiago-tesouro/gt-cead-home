@@ -192,12 +192,51 @@ function mouseMove(e) {
 
 // buzzword
 
+const buzzwords = ["DATA SCIENCE!", "DATA ANALYTICS!", "BIG DATA!", "MACHINE LEARNING!", "INTELIGÊNCIA ARTIFICIAL!"];
+colors = [];
+
 const bw = document.querySelector(".buzzword");
-bw.addEventListener("mouseover", palhacada)
+bw.addEventListener("mouseover", palhacada);
+bw.addEventListener("mouseout", para_palhacada);
+let temp;
+let i = 0;
+let sinal = 1;
 
 function palhacada(e) {
     console.log("ha!");
     const bz = document.querySelector(".buzz");
 
-    bz.innerText = "DATA SCIENCE!!!";
+    temp = setInterval(
+        function() {
+
+            const index = i % buzzwords.length
+
+            const palavra_da_vez = buzzwords[index];
+
+            bz.innerText = palavra_da_vez;
+
+            if (sinal == 1) {
+                bz.classList.add("buzz-left");
+                bz.classList.remove("buzz-right");
+            } else {
+                bz.classList.remove("buzz-left");
+                bz.classList.add("buzz-right");
+            }
+
+            console.log(i, index, sinal, palavra_da_vez);
+
+            i++
+            sinal *= -1;
+
+        }, 1000
+    )
+
+}
+
+function para_palhacada(e) {
+
+    clearInterval(temp);
+    i = 0;
+    sinal = 1
+
 }
