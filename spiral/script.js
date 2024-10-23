@@ -246,14 +246,14 @@ class Grid {
 
             }
 
-            r = this.cell_size * (comb[2] * 0.7 + 0.3); // quero que o raio varie entre 0.3 e 1, e nAão 0 e 1;
+            r = this.cell_size * (comb[2] * 0.7 + 0.3) / 3.5; // quero que o raio varie entre 0.3 e 1, e nAão 0 e 1;
 
             this.draw_single_blotch(x, y, r, color);
 
         })
 
         // para ter o ponto original
-        this.draw_single_blotch(x0, y0, 5, "black");
+        //this.draw_single_blotch(x0, y0, 5, "black");
 
     }
 
@@ -278,12 +278,6 @@ class Grid {
                 const dir = this.drawing_sequence[index + 1].direction;
 
                 this.draw_blotches(x0, y0, dir, color, 20);
-
-
-
-
-
-
 
             }
 
@@ -380,6 +374,9 @@ class Grid {
     }
 
 }
+
+ctx.fillStyle = "#333";
+ctx.fillRect(0, 0, W, H);
 
 const grid = new Grid(L);
 
