@@ -86,6 +86,7 @@ class Grid {
         this.cell_size = Math.floor(W / L);
 
         this.grid = new Array(L * L);
+        this.drawing_sequence = [];
 
     }
 
@@ -99,6 +100,7 @@ class Grid {
 
         seq.forEach(pair => {
             this.fill_cell(pair, data[index_data]);
+            this.drawing_sequence.push(pair);
             index_data++;
         })
 
@@ -127,6 +129,37 @@ class Grid {
             ctx.strokeRect(x - this.cell_size/2, y - this.cell_size/2, this.cell_size, this.cell_size);
             ctx.fillText(cell, x, y);
         })
+
+    }
+
+    draw_spiral() {
+
+        ctx.beginPath();
+
+        this.drawing_sequence.forEach( (pair, index) => {
+
+            const i = pair[0];
+            const j = pair[1];
+
+            const x = i * this.cell_size + this.cell_size / 2;
+            const y = j * this.cell_size + this.cell_size / 2;
+
+            console.log(x,y);
+
+            if (index == 0) {
+
+                ctx.moveTo(x, y);
+
+            } else {
+
+                ctx.lineTo(x,y);
+
+            }
+
+        })
+
+        ctx.lineWidth = this.cell_size / 2;
+        ctx.stroke();
 
     }
 
