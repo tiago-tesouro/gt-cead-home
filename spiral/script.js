@@ -158,8 +158,62 @@ class Grid {
 
         })
 
+        ctx.lineJoin = "round";
         ctx.lineWidth = this.cell_size / 2;
         ctx.stroke();
+
+    }
+
+    draw_spiral2() {
+
+        let color;
+        let last_cell;
+        ctx.lineWidth = this.cell_size / 4;
+
+        const colors = ["dodgerblue", "tomato", "hotpink", "goldenrod", "green"];
+
+        this.drawing_sequence.forEach( (pair, index) => {
+
+            const i = pair[0];
+            const j = pair[1];
+
+            const x = i * this.cell_size + this.cell_size / 2;
+            const y = j * this.cell_size + this.cell_size / 2;
+
+            console.log(x,y);
+
+            const color_index = index % 5;
+
+            color = colors[color_index];
+            ctx.strokeStyle = color;
+            ctx.fillStyle = color;
+
+            //ctx.fillRect(x - this.cell_size/4, y - this.cell_size/4, this.cell_size/2, this.cell_size/2);
+
+            
+            if (index == 0) {
+
+                //ctx.fillStyle = color;
+                //ctx.fillRect(x - this.cell_size/4, y - this.cell_size/4, this.cell_size/2, this.cell_size/2);
+                //ctx.moveTo(x, y);
+
+            } else {
+
+                ctx.beginPath();
+                ctx.moveTo(last_cell[0], last_cell[1]);
+                ctx.lineTo(x,y);
+                console.log(color);
+                ctx.stroke();
+                ctx.closePath();
+
+
+            }
+
+            last_cell = [x,y];
+
+        })
+
+        //ctx.stroke();
 
     }
 
