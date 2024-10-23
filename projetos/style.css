@@ -1,0 +1,31 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    font-family: "Poppins";
+}
+
+h1, p {
+    
+    max-width: 620px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    
+}
+
+h1 {
+    font-size: 4rem;
+    margin-bottom: 0;
+}
+
+.subtitle {
+    text-align: left;
+    border-top: 6px solid currentColor;
+    padding-top: 1rem;
+}
+

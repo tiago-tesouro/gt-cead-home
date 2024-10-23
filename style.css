@@ -179,6 +179,7 @@ figcaption {
     
     display: block;
     max-width: 620px;
+    width: 100%;
     margin-left: auto;
     margin-right: auto;
     
@@ -206,6 +207,15 @@ figcaption {
 .img-full-bleed {
     display: block;
     width: 100%;
+}
+
+.img-full-bleed, figure {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.img-smaller {
+    width: 300px;
 }
 
 .buzzword {
