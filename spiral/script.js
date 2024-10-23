@@ -28,6 +28,15 @@ let k = 0;
 
 let seq_dir = ["h+", "v+", "h-", "v-"];
 
+const symbols = {
+
+    "h+": "→", 
+    "v+": "↓", 
+    "h-": "←", 
+    "v-": "↑"
+
+};
+
 let i_dir = 0;
 
 function get_next_sequence(
@@ -35,6 +44,7 @@ function get_next_sequence(
     ) {
 
     let seq = [];
+    let dirs = [];
 
     let dir = seq_dir[i_dir];
 
@@ -42,6 +52,7 @@ function get_next_sequence(
 
         for (let i = spiral_n; i < L - spiral_n; i++) {
             seq.push([i, spiral_n]);
+            dirs.push(dir);
         }
 
     }
@@ -49,7 +60,8 @@ function get_next_sequence(
     if (dir == "v+") {
 
         for (let j = spiral_n + 1; j < L - spiral_n; j++) {
-            seq.push([L - spiral_n - 1, j])
+            seq.push([L - spiral_n - 1, j]);
+            dirs.push(dir);
 
         }
 
@@ -59,6 +71,7 @@ function get_next_sequence(
 
         for (let i = L - spiral_n  - 2; i > spiral_n - 1; i--) {
             seq.push([i, L - spiral_n - 1]);
+            dirs.push(dir);
 
         }
 
@@ -67,6 +80,7 @@ function get_next_sequence(
     if (dir == "v-") {
         for (let j = L - spiral_n - 2; j > spiral_n; j--) {
             seq.push([spiral_n, j]);
+            dirs.push(dir);
         }
         spiral_n++;
     }
@@ -74,7 +88,7 @@ function get_next_sequence(
     // incrementa
     i_dir = (i_dir + 1) % seq_dir.length
 
-    return seq;
+    return [seq, dirs];
 
 }
 
@@ -87,6 +101,7 @@ class Grid {
 
         this.grid = new Array(L * L);
         this.drawing_sequence = [];
+        this.drawing_directions = [];
 
     }
 
@@ -96,11 +111,13 @@ class Grid {
 
     }
 
-    fill_sequence(seq) {
+    fill_sequence(seq, dirs) {
 
-        seq.forEach(pair => {
+        seq.forEach( (pair, k) => {
             this.fill_cell(pair, data[index_data]);
+            this.fill_directions(pair, dirs[k]);
             this.drawing_sequence.push(pair);
+            //this.drawing_directions.push(seq_dir[i_dir]);
             index_data++;
         })
 
@@ -111,6 +128,13 @@ class Grid {
 
         const index = this.get_index(pair);
         this.grid[index] = value;
+
+    }
+
+    fill_directions(pair, dir) {
+
+        const index = this.get_index(pair);
+        this.drawing_directions[index] = dir;
 
     }
 
@@ -128,6 +152,26 @@ class Grid {
 
             ctx.strokeRect(x - this.cell_size/2, y - this.cell_size/2, this.cell_size, this.cell_size);
             ctx.fillText(cell, x, y);
+        })
+
+    }
+
+    draw_arrows() {
+
+        this.drawing_sequence.forEach( (pair, index) => {
+
+            const i = pair[0];
+            const j = pair[1];
+
+            const x = i * this.cell_size + this.cell_size / 2;
+            const y = j * this.cell_size + this.cell_size / 2;
+
+            //console.log(i, j, x, y);
+            const dir = this.drawing_directions[index];
+            const sym = symbols[dir];
+
+            ctx.strokeRect(x - this.cell_size/2, y - this.cell_size/2, this.cell_size, this.cell_size);
+            ctx.fillText(sym, x, y);
         })
 
     }
@@ -222,8 +266,9 @@ class Grid {
 const grid = new Grid(L);
 
 while (index_data < new_n) {
-    let seq = get_next_sequence();
-    grid.fill_sequence(seq);
+    let [seq, dirs] = get_next_sequence();
+    console.log(seq, dirs);
+    grid.fill_sequence(seq, dirs);
     console.log(index_data, spiral_n);
 }
 
