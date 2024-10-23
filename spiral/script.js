@@ -189,6 +189,108 @@ class Grid {
 
     }
 
+    draw_single_blotch(x, y, r, color) {
+
+        ctx.globalAlpha = 0.5;
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.fillStyle = color;
+        ctx.fill();
+        ctx.closePath();
+
+    }
+
+    draw_blotches(x0, y0, dir, color, n) {
+
+        const random_seq = [];
+
+        for (let k = 0; k < n; k++) {
+
+            const x_ = Math.random();
+            const y_ = Math.random();
+            const r_ = Math.random();
+
+            random_seq.push([x_, y_, r_]);
+
+        }
+
+        random_seq.forEach( comb => {
+
+            let x, y, r;
+
+            if (dir == "h+") {
+
+                x = x0 + comb[0] * this.cell_size;
+                y = y0 + (comb[1] - 0.5) * this.cell_size / 2;
+
+            }
+
+            if (dir == "v+") {
+
+                x = x0 + (comb[0] - 0.5) * this.cell_size / 2;
+                y = y0 + (comb[1]) * this.cell_size;
+
+            }
+
+            if (dir == "h-") {
+
+                x = x0 - comb[0] * this.cell_size;
+                y = y0 + (comb[1] - 0.5) * this.cell_size / 2;
+
+            }
+
+            if (dir == "v-") {
+
+                x = x0 + (comb[0] - 0.5) * this.cell_size / 2;
+                y = y0 - (comb[1]) * this.cell_size;
+
+            }
+
+            r = this.cell_size * (comb[2] * 0.7 + 0.3); // quero que o raio varie entre 0.3 e 1, e nAão 0 e 1;
+
+            this.draw_single_blotch(x, y, r, color);
+
+        })
+
+        // para ter o ponto original
+        this.draw_single_blotch(x0, y0, 5, "black");
+
+    }
+
+    draw_with_blotches() {
+
+        const colors = ["dodgerblue", "tomato", "hotpink", "goldenrod", "green"];
+
+        this.drawing_sequence.forEach( 
+
+            (s, index) => {
+
+                const pair = s.pair;
+                const color_index = index % 5;
+                let color = colors[color_index];
+
+                const i = pair[0];
+                const j = pair[1];
+    
+                const x0 = i * this.cell_size + this.cell_size / 2;
+                const y0 = j * this.cell_size + this.cell_size / 2;
+
+                const dir = this.drawing_sequence[index + 1].direction;
+
+                this.draw_blotches(x0, y0, dir, color, 20);
+
+
+
+
+
+
+
+            }
+
+        )
+
+    }
+
     draw_spiral() {
 
         ctx.beginPath();
