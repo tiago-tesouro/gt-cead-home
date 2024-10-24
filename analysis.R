@@ -38,10 +38,25 @@ result_scaled <- (result$value - min(result$value)) / (max(result$value) - min(r
 jsonlite::write_json(result_scaled, "result.json")
 
 
+ggplot(result) + geom_histogram(aes(x = value), bins = 100)
+ggplot(result) + geom_jitter(aes(x = value, y = 1, color = value)) + theme_minimal()
+
+result_binned <- result %>% mutate(value_binned = cut(value, c(-Inf, -5e4, -2.5e4, 0, 2.5e4, 5e4, Inf), c("muito neg", "bem neg", "neg", "pos", "bem pos", "muito pos")))
+
+ggplot(result_binned) + geom_jitter(aes(x = value, y = 1, color = value_binned)) + theme_minimal() + scale_color_discrete_diverging(palette = "Blue-Red")
+
+ggplot(result_binned) + geom_tile(aes(x = month_name, y = year, fill = value_binned)) + scale_fill_discrete_diverging(palette = "Blue-Red")
+
+jsonlite::write_json(result_binned$value_binned, "result-binned.json")
+
+
+
 ggplot(result, aes(x = Date, y = value)) +
   geom_col() +
   geom_point() +
   theme_minimal()
+
+
 
 ggplot(result, aes(x = year, y = month_name, fill = -value))+
                    #fill = value > 0, alpha = abs(value))) +

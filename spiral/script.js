@@ -7,6 +7,7 @@ const W = getComputedStyle(cv).width.slice(0, -2);
 cv.width = W;
 cv.height = H;
 
+/*
 const n = 330;
 let data = [];
 
@@ -14,7 +15,10 @@ for (let i = 0; i < 330; i++) {
 
     data.push(i);
 
-}
+}*/
+
+let data = ["neg","pos","pos","pos","pos","pos","neg","pos","neg","neg","pos","neg","pos","pos","pos","pos","neg","neg","neg","bem pos","neg","neg","neg","pos","pos","pos","pos","pos","neg","pos","pos","pos","pos","pos","pos","neg","pos","pos","pos","pos","pos","pos","pos","pos","pos","pos","pos","neg","pos","pos","pos","bem pos","pos","pos","pos","pos","pos","pos","pos","neg","pos","pos","pos","pos","pos","pos","pos","pos","bem pos","pos","pos","neg","pos","pos","pos","bem pos","pos","pos","pos","pos","pos","pos","pos","neg","pos","pos","pos","pos","pos","pos","pos","pos","pos","pos","pos","neg","pos","pos","pos","bem pos","pos","pos","pos","pos","pos","pos","pos","neg","pos","pos","pos","bem pos","pos","pos","pos","pos","pos","pos","neg","neg","bem pos","pos","pos","bem pos","pos","pos","pos","pos","pos","bem pos","pos","neg","bem pos","pos","bem pos","bem pos","pos","pos","pos","pos","pos","bem pos","neg","bem neg","pos","neg","pos","pos","neg","neg","pos","pos","neg","bem pos","pos","pos","bem pos","neg","neg","bem pos","neg","pos","pos","pos","muito pos","pos","pos","bem pos","bem pos","pos","pos","bem pos","pos","pos","pos","pos","pos","pos","pos","pos","bem pos","pos","pos","pos","pos","pos","pos","pos","pos","pos","neg","muito pos","bem pos","neg","neg","pos","pos","pos","pos","neg","neg","pos","muito pos","bem pos","pos","neg","pos","bem pos","neg","neg","neg","neg","bem neg","pos","neg","pos","pos","neg","pos","pos","neg","neg","neg","neg","neg","neg","bem neg","muito neg","pos","bem neg","neg","pos","bem neg","neg","bem neg","bem neg","bem neg","muito pos","muito neg","muito neg","bem pos","bem neg","neg","pos","bem neg","bem neg","bem neg","neg","bem neg","pos","pos","bem neg","bem pos","bem neg","bem neg","pos","neg","neg","neg","bem neg","bem neg","pos","neg","bem neg","bem pos","neg","bem neg","pos","neg","neg","neg","neg","bem neg","pos","neg","neg","muito pos","bem neg","bem neg","muito neg","muito neg","muito neg","muito neg","muito neg","muito neg","neg","neg","muito neg","muito pos","bem neg","pos","pos","bem neg","muito neg","neg","neg","pos","bem pos","pos","pos","muito pos","neg","neg","bem pos","bem neg","pos","pos","muito neg","pos","bem pos","neg","pos","muito pos","bem neg","neg","pos","bem neg","bem neg","bem neg","bem neg","pos","pos","bem neg","muito neg","muito pos","muito neg","neg","pos","muito neg","bem neg"]
+let n = data.length;
 
 let index_data = 0;
 let spiral_n = 0;
@@ -36,6 +40,13 @@ const symbols = {
     "v-": "↑"
 
 };
+
+const values = ["muito neg", "bem neg", "neg", "pos", "bem pos", "muito pos"];
+const colors = ["#b2182b", "#ef8a62", "#fddbc7", "#d1e5f0", "#67a9cf", "#2166ac"];
+
+const color_table = {};
+
+values.forEach( (cat, index) => color_table[cat] = colors[index]);
 
 let i_dir = 0;
 
@@ -191,7 +202,6 @@ class Grid {
 
     draw_single_blotch(x, y, r, color) {
 
-        ctx.globalAlpha = 0.5;
         ctx.beginPath();
         ctx.arc(x, y, r, 0, Math.PI * 2);
         ctx.fillStyle = color;
@@ -259,15 +269,19 @@ class Grid {
 
     draw_with_blotches() {
 
-        const colors = ["dodgerblue", "tomato", "hotpink", "goldenrod", "green"];
+        ctx.globalAlpha = 0.5;
+
+        //const colors = ["dodgerblue", "tomato", "hotpink", "goldenrod", "green"];
 
         this.drawing_sequence.forEach( 
 
             (s, index) => {
 
                 const pair = s.pair;
-                const color_index = index % 5;
-                let color = colors[color_index];
+                //const color_index = index % 5;
+                //let color = colors[color_index];
+                const cat = data[index];
+                let color = color_table[cat];
 
                 const i = pair[0];
                 const j = pair[1];
