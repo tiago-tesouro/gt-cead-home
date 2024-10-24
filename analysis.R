@@ -47,7 +47,29 @@ ggplot(result_binned) + geom_jitter(aes(x = value, y = 1, color = value_binned))
 
 ggplot(result_binned) + geom_tile(aes(x = month_name, y = year, fill = value_binned)) + scale_fill_discrete_diverging(palette = "Blue-Red")
 
+ggplot(result_binned) + geom_tile(aes(x = month_name, y = year, fill = value)) +  scale_fill_gradient2(
+  low = "firebrick",    # Color for negative values
+  mid = "white",  # Color for zero
+  high = "steelblue",  # Color for positive values
+  midpoint = 0    # Set zero as the middle point
+) + theme(legend.position = "none")
+
+color_scale <- scales::gradient_n_pal(
+  colours = c("#DC143C","white", "steelblue"),
+  values = c(min(result$value), 0, max(result$value))  # Define the range of the data
+)
+
+color_scale <- scales::gradient_n_pal(
+  colours = c("#DC143C", "#FFD1CE","#CFE6FF", "royalblue"),
+  values = c(min(result$value), -1, 1, max(result$value))  # Define the range of the data
+)
+
+result_binned$colors <- color_scale(result_binned$value)
+
+ggplot(result_binned) + geom_tile(aes(x = month_name, y = year, fill = colors)) +  scale_fill_identity()
+
 jsonlite::write_json(result_binned$value_binned, "result-binned.json")
+jsonlite::write_json(result_binned$colors, "colors.json")
 
 
 
