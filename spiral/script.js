@@ -42,7 +42,7 @@ const symbols = {
 };
 
 const values = ["muito neg", "bem neg", "neg", "pos", "bem pos", "muito pos"];
-const colors = ["#b2182b", "#ef8a62", "#fddbc7", "#d1e5f0", "#67a9cf", "#2166ac"];
+const colors = ["crimson", "indianred", "lightcoral", "lightskyblue", "#1D5B99", "#174777"];
 
 const color_table = {};
 
@@ -271,6 +271,8 @@ class Grid {
 
         ctx.globalAlpha = 0.5;
 
+        const data_length = data.length;
+
         //const colors = ["dodgerblue", "tomato", "hotpink", "goldenrod", "green"];
 
         this.drawing_sequence.forEach( 
@@ -280,7 +282,7 @@ class Grid {
                 const pair = s.pair;
                 //const color_index = index % 5;
                 //let color = colors[color_index];
-                const cat = data[index];
+                const cat = data[data_length - 1 - index];
                 let color = color_table[cat];
 
                 const i = pair[0];
