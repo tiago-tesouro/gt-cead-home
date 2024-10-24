@@ -231,13 +231,13 @@ class Grid {
             if (dir == "h+") {
 
                 x = x0 + comb[0] * this.cell_size;
-                y = y0 + (comb[1] - 0.5) * this.cell_size / 2;
+                y = y0 + (comb[1] - 0.5) * this.cell_size / 3;
 
             }
 
             if (dir == "v+") {
 
-                x = x0 + (comb[0] - 0.5) * this.cell_size / 2;
+                x = x0 + (comb[0] - 0.5) * this.cell_size / 3;
                 y = y0 + (comb[1]) * this.cell_size;
 
             }
@@ -245,18 +245,18 @@ class Grid {
             if (dir == "h-") {
 
                 x = x0 - comb[0] * this.cell_size;
-                y = y0 + (comb[1] - 0.5) * this.cell_size / 2;
+                y = y0 + (comb[1] - 0.5) * this.cell_size / 3;
 
             }
 
             if (dir == "v-") {
 
-                x = x0 + (comb[0] - 0.5) * this.cell_size / 2;
+                x = x0 + (comb[0] - 0.5) * this.cell_size / 3;
                 y = y0 - (comb[1]) * this.cell_size;
 
             }
 
-            r = this.cell_size * (comb[2] * 0.7 + 0.3) / 3.5; // quero que o raio varie entre 0.3 e 1, e nAão 0 e 1;
+            r = this.cell_size * (comb[2] * 0.7 + 0.3) / 4; // quero que o raio varie entre 0.3 e 1, e nAão 0 e 1;
 
             this.draw_single_blotch(x, y, r, color);
 
@@ -391,7 +391,7 @@ class Grid {
 
 }
 
-ctx.fillStyle = "#333";
+ctx.fillStyle = "floralwhite";
 ctx.fillRect(0, 0, W, H);
 
 const grid = new Grid(L);
@@ -401,4 +401,6 @@ while (index_data < new_n) {
     grid.fill_sequence(seq);
     console.log(index_data, spiral_n);
 }
+
+grid.draw_with_blotches()
 

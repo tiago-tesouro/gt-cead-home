@@ -2,8 +2,17 @@
     box-sizing: border-box;
 }
 
+body {
+    height: 100vh;
+    padding: 2rem;
+    display: grid;
+    place-content: center;
+    background-color: floralwhite;
+}
+
 canvas {
-    width: 800px;
-    height: 800px;
+    width: 700px;
+    height: 700px;
+    transform: rotate(45deg);
     /*border: 2px solid hotpink;*/
 }
