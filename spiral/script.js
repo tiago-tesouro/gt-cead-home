@@ -418,5 +418,9 @@ while (index_data < new_n) {
     console.log(index_data, spiral_n);
 }
 
-grid.draw_with_blotches()
+//grid.draw_with_blotches()
+
+const p2 = new Polygon(new Vec(300, 300), 5, 200);
+p2.render(ctx);
+p2.interpolate_sides();
 
