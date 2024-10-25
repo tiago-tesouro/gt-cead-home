@@ -12,7 +12,8 @@ body {
 }
 
 h1 {
-    margin-left: 1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
     color: ghostwhite;
     text-align: right;
 
