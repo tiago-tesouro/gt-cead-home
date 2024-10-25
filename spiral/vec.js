@@ -32,6 +32,22 @@ class Vec {
 
     }
 
+    mag() {
+
+        return Math.sqrt(this.x * this.x + this.y * this.y);
+
+    }
+
+    get_dir() {
+
+        let mag = this.mag();
+
+        let dir = new Vec(this.x / mag, this.y / mag);
+
+        return dir;
+
+    }
+
     scale(k) {
 
         this.x *= k;
@@ -39,14 +55,24 @@ class Vec {
 
     }
 
+    rotate(fi) {
+
+        const x_ = Math.cos(fi) * this.x - Math.sin(fi) * this.y;
+        const y_ = Math.sin(fi) * this.x + Math.cos(fi) * this.y;
+
+        this.x = x_;
+        this.y = y_;
+
+    }
+
     renderAsPoint(ctx, color = "black") {
 
         ctx.save();
-        ctx.strokeStyle = color;
+        ctx.fillStyle = color;
         ctx.beginPath();
         ctx.arc(this.x, this.y, 5, 0, Math.PI * 2);
         ctx.closePath();
-        ctx.stroke();
+        ctx.fill();
         ctx.restore();
 
     }
