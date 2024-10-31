@@ -34,8 +34,8 @@ class Polygon {
         dir.rotate(Math.PI/2);
 
         let normal = Vec.add(point, dir);
-        point.renderAsPoint(ctx);
-        normal.renderAsPoint(ctx);
+        //point.renderAsPoint(ctx);
+        //normal.renderAsPoint(ctx);
         normal = Vec.sub(normal, point);
         normal = normal.get_dir();
 
@@ -54,36 +54,62 @@ class Polygon {
 
     interpolate_sides() {
 
+        const new_vertices = [];
+
         this.vertices.forEach( (p, i, arr) => {
 
+            /* números aleatórios */
+            const m = gaussianRand();
+            const k = gaussianRand();
+            const theta = gaussianRand() * Math.PI / 2;
+
+            //console.log(m, k, theta);
+
             const next_i = ( i + 1 ) % arr.length;
+            const p2 = arr[next_i];
 
-            const middle = this.generate_extra_point(p, arr[next_i], 0.1);
+            // RANDOM
+            const middle = this.generate_extra_point(p, p2, m);
 
+            /* debug */
+            /*
             ctx.strokeStyle = "gray";
             ctx.beginPath();
             ctx.arc(middle.x, middle.y, 50, 0, Math.PI * 2);
             ctx.stroke();
             ctx.closePath();  
+            */
             
             let normal = this.get_normal(middle, p);
+            /* só para debug */
+            /*
             console.log(normal);
             normal.scale(50);
             const normal_point = Vec.add(middle, normal);
 
-            /* normais de verdade */
             ctx.strokeStyle = "blue";
             ctx.beginPath();
             ctx.moveTo(middle.x, middle.y);
             ctx.lineTo(normal_point.x, normal_point.y);
             ctx.stroke();
             ctx.closePath();
+            */
 
             /*rotaciona a normal*/
             let dir = new Vec(normal.x, normal.y);
-            dir.rotate(Math.PI/6);
+
+            //RANDOM
+            
+            dir.rotate(theta);
+            //RANDOM
+            const tamanho_lado = Vec.get_distance(p, p2);
+
+            dir.scale(k * tamanho_lado);
+
             const dir_point = Vec.add(middle, dir);
 
+            /* para debug */
+            /*
             ctx.strokeStyle = "red";
             ctx.beginPath();
             ctx.moveTo(middle.x, middle.y);
@@ -94,9 +120,18 @@ class Polygon {
             middle.renderAsPoint(ctx, "yellow");
             normal_point.renderAsPoint(ctx, "blue");
             dir_point.renderAsPoint(ctx, "red");
+            */
 
+            //console.log(p, dir_point, p2);
+            //dir_point.renderAsPoint(ctx, "red");
+
+
+            new_vertices.push(p);
+            new_vertices.push(dir_point);
 
         })
+
+        this.vertices = [...new_vertices];
 
     }
 
@@ -104,7 +139,8 @@ class Polygon {
 
         const m = Vec.sub(p1, p2);
 
-        if (!k) k = 0.1;
+       // if (!k) k = 0.1;
+       //console.log(k);
 
         m.scale(k);
 
@@ -143,12 +179,43 @@ class Polygon {
 
             if (i == this.vertices.length - 1) {
 
-                ctx.fillStyle = "khaki";
-                ctx.strokeStyle = "khaki";
+                ctx.fillStyle = "dodgerblue";
+
+                ctx.closePath();
+                //ctx.stroke();
+                ctx.fill();
+                ctx.restore();
+
+            }
+
+        })
+
+    }
+
+    render_contour(ctx) {
+
+        this.vertices.forEach( (p, i) => {
+
+            if (i == 0) {
+
+                ctx.save();
+                ctx.beginPath();
+                ctx.moveTo(p.x, p.y);
+
+            } else {
+
+                ctx.lineTo(p.x, p.y);
+
+            }
+
+            if (i == this.vertices.length - 1) {
+
+                //ctx.fillStyle = "khaki";
+                ctx.strokeStyle = "black";
 
                 ctx.closePath();
                 ctx.stroke();
-                ctx.fill();
+                //ctx.fill();
                 ctx.restore();
 
             }

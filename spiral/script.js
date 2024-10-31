@@ -1,15 +1,19 @@
 const cv = document.querySelector("canvas");
 const ctx = cv.getContext("2d");
 
-const H = getComputedStyle(cv).height.slice(0, -2);
-const W = getComputedStyle(cv).width.slice(0, -2);
+let H = getComputedStyle(cv).height.slice(0, -2);
+let W = getComputedStyle(cv).width.slice(0, -2);
 
 const DIM = Math.min(H, W);
 
 console.log(H,W);
 
-cv.width = DIM;
-cv.height = DIM;
+cv.width = DIM * 2 ;
+cv.height = DIM * 2 ;
+
+H = 2 * DIM;
+W = 2 * DIM;
+
 cv.style.width = DIM + "px";
 cv.style.height = DIM + "px";
 
@@ -180,7 +184,7 @@ class Grid {
             const x = i * this.cell_size + this.cell_size / 2;
             const y = j * this.cell_size + this.cell_size / 2;
 
-            console.log(i, j, x, y);
+            //console.log(i, j, x, y);
 
             ctx.strokeRect(x - this.cell_size/2, y - this.cell_size/2, this.cell_size, this.cell_size);
             ctx.fillText(cell, x, y);
@@ -330,7 +334,7 @@ class Grid {
             const x = i * this.cell_size + this.cell_size / 2;
             const y = j * this.cell_size + this.cell_size / 2;
 
-            console.log(x,y);
+            //console.log(x,y);
 
             if (index == 0) {
 
@@ -368,7 +372,7 @@ class Grid {
             const x = i * this.cell_size + this.cell_size / 2;
             const y = j * this.cell_size + this.cell_size / 2;
 
-            console.log(x,y);
+            //console.log(x,y);
 
             const color_index = index % 5;
 
@@ -389,7 +393,7 @@ class Grid {
                 ctx.beginPath();
                 ctx.moveTo(last_cell[0], last_cell[1]);
                 ctx.lineTo(x,y);
-                console.log(color);
+                //console.log(color);
                 ctx.stroke();
                 ctx.closePath();
 
@@ -406,21 +410,40 @@ class Grid {
 
 }
 
-//ctx.fillStyle = "floralwhite";
+ctx.fillStyle = "floralwhite";
 //ctx.fillStyle = "#333";
-//ctx.fillRect(0, 0, W, H);
+ctx.fillRect(0, 0, W, H);
 
 const grid = new Grid(L);
 
 while (index_data < new_n) {
     const seq = get_next_sequence();
     grid.fill_sequence(seq);
-    console.log(index_data, spiral_n);
+    //console.log(index_data, spiral_n);
 }
 
 //grid.draw_with_blotches()
 
-const p2 = new Polygon(new Vec(300, 300), 8, 200);
+ctx.globalAlpha = .15;
+const p2 = new Polygon(new Vec(W/2, H/2), 8, 150);
 p2.render(ctx);
-p2.interpolate_sides();
+
+const rep = 15;
+for (let i = 0; i < rep; i++) {
+    p2.interpolate_sides();
+    p2.render(ctx);
+}
+    
+
+//const p3 = new Polygon(new Vec(W/2, H/2), 8, 200);
+//ctx.globalAlpha = 1;
+/*
+p3.render_contour(ctx);
+//p3.render_contour(ctx);
+
+for (let i = 0; i < 2; i++) {
+    p3.interpolate_sides();
+    p3.render_contour(ctx);
+}*/
+
 

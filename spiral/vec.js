@@ -32,6 +32,14 @@ class Vec {
 
     }
 
+    static get_distance(v1, v2) {
+
+        const distance_vector = this.sub(v1, v2);
+
+        return distance_vector.mag();
+
+    }
+
     mag() {
 
         return Math.sqrt(this.x * this.x + this.y * this.y);
