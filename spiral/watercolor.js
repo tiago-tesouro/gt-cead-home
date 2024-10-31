@@ -159,6 +159,100 @@ class Polygon {
 
 }
 
+function gaussianRandom(mean=0, stdev=1) {
+    const u = 1 - Math.random(); // Converting [0,1) to (0,1)
+    const v = Math.random();
+    const z = Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v );
+    // Transform to the desired mean and standard deviation:
+    if (isNaN(z * stdev + mean)) return "pem";
+    return z * stdev + mean;
+}
+
+//https://stackoverflow.com/questions/25582882/javascript-math-random-normal-distribution-gaussian-bell-curve/39187274#39187274
+function gaussianRand() {
+    var rand = 0;
+  
+    for (var i = 0; i < 6; i += 1) {
+      rand += Math.random();
+    }
+  
+    return rand / 6; // 0 and 1
+  }
+/*
+const times = [];
+const random_values = [];
+
+for (let i = 0; i <= 1000; i++) {
+
+    const t0 = performance.now();
+    const new_v = gaussianRand();//gaussianRandom(0, 1);
+    random_values.push(new_v);
+    const t1 = performance.now();
+    times.push(t1-t0);
+
+}*/
+
+function chart(ctx) {
+
+    const w = 500;
+    const h = 400;
+
+    const m = 20;
+
+    const x0 = 100;
+    const y0 = 100;
+
+    ctx.fillStyle = "white";
+    ctx.fillRect(x0, y0, 500, 400);
+    ctx.fill();
+
+    // ranges v
+    const range_v = [Math.min(...random_values), Math.max(...random_values)];
+    const range_y = [y0 + h - m, y0 + m];
+    const range_x = [x0 + m, x0 + w - m];
+    const range_i = [0, random_values.length];
+
+    console.log(range_v, range_y);
+
+    function scale_y(v) {
+
+        return (range_y[1] - range_y[0]) * (v - range_v[0]) / (range_v[1] - range_v[0]) + range_y[0];
+
+    }
+
+    function scale_x(i) {
+
+        return (range_x[1] - range_x[0]) * (i - range_i[0]) / (range_i[1] - range_i[0]) + range_x[0];
+
+    }
+
+    ctx.beginPath();
+    
+    random_values.forEach( (v, i, arr) => {
+
+        const x = scale_x(i);
+        const y = scale_y(v);
+
+        //console.log(x,y)
+
+        if (i == 0) {ctx.moveTo(x,y)}
+        else {
+            ctx.lineTo(x,y);
+        }
+
+        if (i == arr.length - 1) {
+            ctx.strokeStyle = "dodgerblue";
+            ctx.stroke();
+        }
+
+    })
+
+
+
+}
+
+
+
 
 
 
