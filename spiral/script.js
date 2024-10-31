@@ -420,7 +420,7 @@ while (index_data < new_n) {
 
 //grid.draw_with_blotches()
 
-const p2 = new Polygon(new Vec(300, 300), 5, 200);
+const p2 = new Polygon(new Vec(300, 300), 8, 200);
 p2.render(ctx);
 p2.interpolate_sides();
 
