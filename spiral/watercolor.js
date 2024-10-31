@@ -58,12 +58,7 @@ class Polygon {
 
             const next_i = ( i + 1 ) % arr.length;
 
-            //const middle = this.generate_middle_point(p, arr[next_i]);
             const middle = this.generate_extra_point(p, arr[next_i], 0.1);
-
-            //normal.scale(50);
-            //normal.rotate(Math.PI / 4);
-            //normal = Vec.add(middle, normal);
 
             ctx.strokeStyle = "gray";
             ctx.beginPath();
@@ -75,21 +70,6 @@ class Polygon {
             console.log(normal);
             normal.scale(50);
             const normal_point = Vec.add(middle, normal);
-
-
-            //let outer = new Vec(normal.x, normal.y);
-            //outer.scale(100);
-            //console.log(outer);
-            //outer = Vec.add(middle, outer);
-            //console.log(outer);
-
-            /* normais "radiais"
-            ctx.strokeStyle = "red";
-            ctx.beginPath();
-            ctx.moveTo(this.center.x, this.center.y);
-            ctx.lineTo(outer.x, outer.y);
-            ctx.stroke();
-            ctx.closePath(); */
 
             /* normais de verdade */
             ctx.strokeStyle = "blue";
