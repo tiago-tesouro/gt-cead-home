@@ -1,10 +1,11 @@
 class Polygon {
 
-    constructor(center, nSides, radius) {
+    constructor(center, nSides, radius, color) {
 
         this.center = center;
         this.nSides = nSides;
         this.radius = radius;
+        this.color = color;
 
         this.vertices = [];
         this.current_vertices = [];
@@ -167,7 +168,7 @@ class Polygon {
 
             if (i == 0) {
 
-                ctx.save();
+                //ctx.save();
                 ctx.beginPath();
                 ctx.moveTo(p.x, p.y);
 
@@ -179,12 +180,10 @@ class Polygon {
 
             if (i == this.vertices.length - 1) {
 
-                ctx.fillStyle = "dodgerblue";
-
                 ctx.closePath();
                 //ctx.stroke();
                 ctx.fill();
-                ctx.restore();
+                //ctx.restore();
 
             }
 
@@ -221,6 +220,21 @@ class Polygon {
             }
 
         })
+
+    }
+
+    plot(ctx) {
+
+        ctx.globalAlpha = .15;
+        ctx.fillStyle = this.color;
+
+        this.render(ctx);
+
+        const rep = 15;
+        for (let i = 0; i < rep; i++) {
+            this.interpolate_sides();
+            this.render(ctx);
+        }
 
     }
 

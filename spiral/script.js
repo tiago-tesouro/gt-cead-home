@@ -424,15 +424,11 @@ while (index_data < new_n) {
 
 //grid.draw_with_blotches()
 
-ctx.globalAlpha = .15;
-const p2 = new Polygon(new Vec(W/2, H/2), 8, 150);
-p2.render(ctx);
 
-const rep = 15;
-for (let i = 0; i < rep; i++) {
-    p2.interpolate_sides();
-    p2.render(ctx);
-}
+const p2 = new Polygon(new Vec(W/3, H/2), 10, 150, "dodgerblue");
+const p1 = new Polygon(new Vec(2*W/3, H/2), 10, 150, "crimson");
+
+
     
 
 //const p3 = new Polygon(new Vec(W/2, H/2), 8, 200);
