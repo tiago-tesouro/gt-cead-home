@@ -1,16 +1,29 @@
 class Polygon {
 
-    constructor(center, nSides, radius, color) {
+    constructor(center, nSides, radius, color, dir) {
 
         this.center = center;
         this.nSides = nSides;
         this.radius = radius;
         this.color = color;
+        this.dir = dir;
 
         this.vertices = [];
         this.current_vertices = [];
 
         this.innerTheta = Math.PI * 2 / nSides;
+
+        const overweight = 1.5;
+
+        this.weights = {
+
+            "h+" : [overweight, 1, 1, 1, 1, 1, 1, overweight],
+            "v+" : [1, overweight, overweight, 1, 1, 1, 1, 1],
+            "h-" : [1, 1, 1, overweight, overweight, 1, 1, 1],
+            "v-" : [1, 1, 1, 1, 1, overweight, overweight, 1],
+            "none" : [1,1,1,1,1,1,1,1]
+            
+        }
 
         const nVertices = nSides    ;
 
@@ -20,7 +33,14 @@ class Polygon {
 
             const p = Vec.add(this.center, p_);
 
-            this.vertices.push(p);
+            const w = this.weights[this.dir][i];
+
+            const v = {
+                position: p,
+                weight: w
+            }
+
+            this.vertices.push(v);
 
         }
 
@@ -53,11 +73,34 @@ class Polygon {
 
     }
 
+    plot_hobbs() {
+
+        this.interpolate_sides();
+        this.interpolate_sides();
+        this.interpolate_sides();
+
+        this.intermediate_vertices = [...this.vertices];
+
+        for (let i = 0; i < 50; i++) {
+
+            this.vertices = [...this.intermediate_vertices];
+            this.interpolate_sides();
+            this.interpolate_sides();
+            this.interpolate_sides();
+            this.render(ctx, 0.01);
+
+        }
+
+    }
+
     interpolate_sides() {
 
         const new_vertices = [];
 
-        this.vertices.forEach( (p, i, arr) => {
+        this.vertices.forEach( (v, i, arr) => {
+
+            const p = v.position;
+            const weight = v.weight;
 
             /* números aleatórios */
             const m = gaussianRand();
@@ -67,7 +110,7 @@ class Polygon {
             //console.log(m, k, theta);
 
             const next_i = ( i + 1 ) % arr.length;
-            const p2 = arr[next_i];
+            const p2 = arr[next_i].position;
 
             // RANDOM
             const middle = this.generate_extra_point(p, p2, m);
@@ -105,7 +148,7 @@ class Polygon {
             //RANDOM
             const tamanho_lado = Vec.get_distance(p, p2);
 
-            dir.scale(k * tamanho_lado);
+            dir.scale(k * tamanho_lado * weight);
 
             const dir_point = Vec.add(middle, dir);
 
@@ -126,9 +169,14 @@ class Polygon {
             //console.log(p, dir_point, p2);
             //dir_point.renderAsPoint(ctx, "red");
 
+            const new_v = {
+                position: dir_point,
+                weight: weight
+            }
 
-            new_vertices.push(p);
-            new_vertices.push(dir_point);
+
+            new_vertices.push(v);
+            new_vertices.push(new_v);
 
         })
 
@@ -162,12 +210,14 @@ class Polygon {
 
     randomize_middle_point() {}
 
-    render(ctx) {
+    render(ctx, alpha) {
 
-        ctx.globalAlpha = .15;
+        ctx.globalAlpha = alpha ? alpha : .15;
         ctx.fillStyle = this.color;
 
-        this.vertices.forEach( (p, i) => {
+        this.vertices.forEach( (v, i) => {
+
+            const p = v.position;
 
             if (i == 0) {
 
@@ -196,7 +246,9 @@ class Polygon {
 
     render_contour(ctx) {
 
-        this.vertices.forEach( (p, i) => {
+        this.vertices.forEach( (v, i) => {
+
+            const p = v.position;
 
             if (i == 0) {
 
@@ -241,11 +293,11 @@ class Polygon {
 
     }
 
-    iterate(ctx, rep) {
+    iterate(ctx, rep, alpha) {
 
         for (let i = 0; i < rep; i++) {
             this.interpolate_sides();
-            this.render(ctx);
+            this.render(ctx, alpha);
         } 
 
     }
