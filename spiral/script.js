@@ -270,7 +270,7 @@ class Grid {
 
             }
 
-            r = this.cell_size * (comb[2] * 0.7 + 0.3) / 5; // quero que o raio varie entre 0.3 e 1, e nAão 0 e 1;
+            r = this.cell_size * (comb[2] * 1 + 0.3) / 5; // quero que o raio varie entre 0.3 e 1, e nAão 0 e 1;
 
             this.draw_single_blotch(x, y, r, color);
 
@@ -283,7 +283,7 @@ class Grid {
 
     draw_with_blotches() {
 
-        ctx.globalAlpha = .8;
+        ctx.globalAlpha = .50;
 
         const data_length = data.length;
 
@@ -414,6 +414,22 @@ class Grid {
 
         this.polygons = [];
 
+        const x0s = {
+            "h+" : 1.5,
+            "h-" : -1.5,
+            "v+" : 0,
+            "v-" : 0,
+            "none" : 0
+        }
+
+        const y0s = {
+            "v+" : 1.5,
+            "v-" : -1.5,
+            "h+" : 0,
+            "h-" : 0,
+            "none" : 0
+        }
+
         this.drawing_sequence.forEach( (s, index) => {
 
             let color = data_colors[data.length - 1 - index];
@@ -426,10 +442,26 @@ class Grid {
             const x = i * this.cell_size + this.cell_size / 2;
             const y = j * this.cell_size + this.cell_size / 2;
 
-            const p = new Polygon(new Vec(x, y), 8, this.cell_size/4, color);
+            let dir = index + 1 == this.drawing_sequence.length ? 
+                "none" :
+                this.drawing_sequence[index + 1].direction;
 
-            p.render(ctx);
-            p.iterate(ctx,4);
+            //console.log(dir);
+
+            const p = new Polygon(new Vec(x, y), 8, this.cell_size/4, color, dir);
+
+            // extra polygon
+
+            /*
+            const xd = x0s[dir] * this.cell_size;
+            const yd = y0s[dir] * this.cell_size;
+            const p_extra = new Polygon(new Vec(x + xd, y + yd), 8, this.cell_size/4, color, dir);
+            */
+
+            p.render(ctx, 0.3);
+            p.iterate(ctx,4, 0.3);
+            //p_extra.render(ctx);
+            //p_extra.iterate(ctx, 4);
 
             this.polygons.push(p);
 
