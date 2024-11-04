@@ -408,6 +408,35 @@ class Grid {
 
     }
 
+    draw_watercolors() {
+
+        ctx.beginPath();
+
+        this.polygons = [];
+
+        this.drawing_sequence.forEach( (s, index) => {
+
+            let color = data_colors[data.length - 1 - index];
+
+            const pair = s.pair;
+
+            const i = pair[0];
+            const j = pair[1];
+
+            const x = i * this.cell_size + this.cell_size / 2;
+            const y = j * this.cell_size + this.cell_size / 2;
+
+            const p = new Polygon(new Vec(x, y), 8, this.cell_size/4, color);
+
+            p.render(ctx);
+            p.iterate(ctx,4);
+
+            this.polygons.push(p);
+
+        })
+
+    }
+
 }
 
 ctx.fillStyle = "floralwhite";
@@ -425,8 +454,8 @@ while (index_data < new_n) {
 //grid.draw_with_blotches()
 
 
-const p2 = new Polygon(new Vec(W/3, H/2), 10, 150, "dodgerblue");
-const p1 = new Polygon(new Vec(2*W/3, H/2), 10, 150, "crimson");
+//const p2 = new Polygon(new Vec(W/3, H/2), 8, 150, "dodgerblue");
+//const p1 = new Polygon(new Vec(2*W/3, H/2), 8, 150, "crimson");
 
 
     

@@ -164,6 +164,9 @@ class Polygon {
 
     render(ctx) {
 
+        ctx.globalAlpha = .15;
+        ctx.fillStyle = this.color;
+
         this.vertices.forEach( (p, i) => {
 
             if (i == 0) {
@@ -225,8 +228,8 @@ class Polygon {
 
     plot(ctx) {
 
-        ctx.globalAlpha = .15;
-        ctx.fillStyle = this.color;
+        // ctx.globalAlpha = .15;
+        // ctx.fillStyle = this.color;
 
         this.render(ctx);
 
@@ -235,6 +238,15 @@ class Polygon {
             this.interpolate_sides();
             this.render(ctx);
         }
+
+    }
+
+    iterate(ctx, rep) {
+
+        for (let i = 0; i < rep; i++) {
+            this.interpolate_sides();
+            this.render(ctx);
+        } 
 
     }
 
