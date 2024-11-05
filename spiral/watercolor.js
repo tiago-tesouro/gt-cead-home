@@ -37,7 +37,7 @@ class Polygon {
 
             const v = {
                 position: p,
-                weight: w
+                weight: 1 //w  // comentando aqui para não usar essa técnica de pesos
             }
 
             this.vertices.push(v);

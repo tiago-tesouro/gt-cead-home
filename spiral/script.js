@@ -56,7 +56,11 @@ const symbols = {
 };
 
 const values = ["muito neg", "bem neg", "neg", "pos", "bem pos", "muito pos"];
-const colors = ["crimson", "indianred", "lightcoral", "lightskyblue", "#1D5B99", "#174777"];
+const colors = ["crimson", "indianred", "lightcoral", 
+    "lightskyblue", 
+    "#1D5B99", 
+    "#174777"];
+//const colors = ["#FF00FF", "#FFCCFF", "#FFDDFF", "#DDFFFF", "#CCFFFF", "#00FFFF"];
 
 const color_table = {};
 
@@ -245,13 +249,13 @@ class Grid {
             if (dir == "h+") {
 
                 x = x0 + comb[0] * this.cell_size;
-                y = y0 + (comb[1] - 0.5) * this.cell_size / 3;
+                y = y0 + (comb[1] - 0.5) * this.cell_size / 4; // quanto maior esse denominador, menos variação transversal
 
             }
 
             if (dir == "v+") {
 
-                x = x0 + (comb[0] - 0.5) * this.cell_size / 3;
+                x = x0 + (comb[0] - 0.5) * this.cell_size / 4;
                 y = y0 + (comb[1]) * this.cell_size;
 
             }
@@ -259,18 +263,18 @@ class Grid {
             if (dir == "h-") {
 
                 x = x0 - comb[0] * this.cell_size;
-                y = y0 + (comb[1] - 0.5) * this.cell_size / 3;
+                y = y0 + (comb[1] - 0.5) * this.cell_size / 4;
 
             }
 
             if (dir == "v-") {
 
-                x = x0 + (comb[0] - 0.5) * this.cell_size / 3;
+                x = x0 + (comb[0] - 0.5) * this.cell_size / 4;
                 y = y0 - (comb[1]) * this.cell_size;
 
             }
 
-            r = this.cell_size * (comb[2] * 1 + 0.3) / 5; // quero que o raio varie entre 0.3 e 1, e nAão 0 e 1;
+            r = this.cell_size * (comb[2] * 1 + 0.3) / 6; // quero que o raio varie entre 0.3 e 1, e nAão 0 e 1;
 
             this.draw_single_blotch(x, y, r, color);
 
@@ -283,7 +287,7 @@ class Grid {
 
     draw_with_blotches() {
 
-        ctx.globalAlpha = .50;
+        ctx.globalAlpha = .15;
 
         const data_length = data.length;
 
@@ -298,9 +302,9 @@ class Grid {
                 //let color = colors[color_index];
 
                 /// reversing the spiral
-                //const cat = data[data_length - 1 - index];
-                //let color = color_table[cat];
-                let color = data_colors[data_length - 1 - index];
+                const cat = data[data_length - 1 - index];
+                let color = color_table[cat];
+                //let color = data_colors[data_length - 1 - index];
 
                 const i = pair[0];
                 const j = pair[1];
@@ -360,7 +364,8 @@ class Grid {
         let last_cell;
         ctx.lineWidth = this.cell_size / 4;
 
-        const colors = ["dodgerblue", "tomato", "hotpink", "goldenrod", "green"];
+        const colors = ["#00FFFF", "#CCFFFF", "ghostwhite", "#FFCCFF", "#FF00FF" ];
+        //const colors = ["dodgerblue", "tomato", "hotpink", "goldenrod", "green"];
 
         this.drawing_sequence.forEach( (s, index) => {
 
@@ -430,9 +435,13 @@ class Grid {
             "none" : 0
         }
 
+        const data_length = data.length;
+
         this.drawing_sequence.forEach( (s, index) => {
 
-            let color = data_colors[data.length - 1 - index];
+            //let color = data_colors[data.length - 1 - index];
+            const cat = data[data_length - 1 - index];
+            let color = color_table[cat];
 
             const pair = s.pair;
 
@@ -448,7 +457,7 @@ class Grid {
 
             //console.log(dir);
 
-            const p = new Polygon(new Vec(x, y), 8, this.cell_size/4, color, dir);
+            const p = new Polygon(new Vec(x, y), 8, this.cell_size/5, color, dir);
 
             // extra polygon
 
@@ -459,7 +468,7 @@ class Grid {
             */
 
             p.render(ctx, 0.3);
-            p.iterate(ctx,4, 0.3);
+            p.iterate(ctx, 6, 0.3);
             //p_extra.render(ctx);
             //p_extra.iterate(ctx, 4);
 
@@ -471,9 +480,9 @@ class Grid {
 
 }
 
-ctx.fillStyle = "floralwhite";
+ctx.fillStyle = "#111";//"floralwhite";
 //ctx.fillStyle = "#333";
-ctx.fillRect(0, 0, W, H);
+//ctx.fillRect(0, 0, W, H);
 
 const grid = new Grid(L);
 
