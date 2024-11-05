@@ -19,7 +19,19 @@ h1 {
 
 }
 
-canvas {
+.chart-container {
+    position: relative;
+    width: 80vmin;
+    height: 80vmin;
+}
+
+canvas, .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+canvas, .overlay {
     width: 80vmin;
     height: 80vmin;
     max-width: min(100%, 600px);
@@ -28,4 +40,36 @@ canvas {
     height: 700px;*/
     /*transform: rotate(45deg);*/
     /*border: 2px solid hotpink;*/
+}
+
+rect {
+    fill: transparent;
+    stroke: transparent;
+    stroke-width: 2;
+    /*transform: rotate(145deg) scale(1.5);*/
+    transition: stroke .2s;
+}
+
+rect:hover {
+    /*stroke: black;*/
+    /*transform: rotate(0) scale(0.6);*/
+
+
+}
+
+line {
+    stroke: transparent;
+    transform: translate(-120px, 0);
+    transition: stroke .2s, transform .4s;
+}
+
+rect:hover + line {
+    transform: translate(0,0);
+    stroke: blue;
+}
+
+
+
+.overlay {
+    z-index: 1;
 }

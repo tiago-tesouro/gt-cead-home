@@ -1,3 +1,4 @@
+const svg = document.querySelector("svg");
 const cv = document.querySelector("canvas");
 const ctx = cv.getContext("2d");
 
@@ -10,12 +11,19 @@ console.log(H,W);
 
 cv.width = DIM * 2 ;
 cv.height = DIM * 2 ;
+svg.width = DIM * 2;
+svg.height = DIM * 2;
+svg.setAttribute("viewBox", `0 0 ${DIM*2} ${DIM*2}`);
 
 H = 2 * DIM;
 W = 2 * DIM;
 
+const res = 2;
+
 cv.style.width = DIM + "px";
 cv.style.height = DIM + "px";
+svg.style.width = DIM + "px";
+svg.style.height = DIM + "px";
 
 /*
 const n = 330;
@@ -154,6 +162,74 @@ class Grid {
 
     }
 
+    build_grid_overlay(svg) {
+
+        this.grid.forEach( (cell, index) => {
+
+            const i = index % this.L;
+            const j = Math.floor( index / this.L );
+
+            const x = i * this.cell_size;
+            const y = j * this.cell_size;
+
+            const sq = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+
+            sq.setAttribute("x", x);
+            sq.setAttribute("y", y);
+            sq.setAttribute("width", this.cell_size);
+            sq.setAttribute("height", this.cell_size);
+            sq.setAttribute("transform-origin", `${x + this.cell_size / 2} ${y + this.cell_size / 2}`);
+
+            const line_top = document.createElementNS("http://www.w3.org/2000/svg", "line");
+            const line_bottom = document.createElementNS("http://www.w3.org/2000/svg", "line");
+            const line_left = document.createElementNS("http://www.w3.org/2000/svg", "line");
+            const line_right = document.createElementNS("http://www.w3.org/2000/svg", "line");
+
+            line_top.setAttribute("x1", x);
+            line_top.setAttribute("x2", x + this.cell_size);
+            line_top.setAttribute("y1", y);
+            line_top.setAttribute("y2", y);
+
+            line_left.setAttribute("x1", x);
+            line_left.setAttribute("x2", x);
+            line_left.setAttribute("y1", y);
+            line_left.setAttribute("y2", y + this.cell_size);
+
+            line_bottom.setAttribute("x1", x);
+            line_bottom.setAttribute("x2", x + this.cell_size);
+            line_bottom.setAttribute("y1", y + this.cell_size);
+            line_bottom.setAttribute("y2", y + this.cell_size);
+
+            line_right.setAttribute("x1", x + this.cell_size);
+            line_right.setAttribute("x2", x + this.cell_size);
+            line_right.setAttribute("y1", y);
+            line_right.setAttribute("y2", y + this.cell_size);
+
+            line_top.classList.add("line-top");
+            line_bottom.classList.add("line-bottom");
+            line_right.classList.add("line-right");
+            line_left.classList.add("line-left");
+
+
+
+            const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+
+
+            g.appendChild(sq);
+
+            g.appendChild(line_top);
+            g.appendChild(line_bottom);
+            g.appendChild(line_right);
+            g.appendChild(line_left);
+
+            svg.appendChild(g);
+
+
+
+        })
+
+    }
+
     fill_sequence(seq) {
 
         seq.forEach( (s, k) => {
@@ -287,7 +363,7 @@ class Grid {
 
     draw_with_blotches() {
 
-        ctx.globalAlpha = .15;
+        ctx.globalAlpha = .22;
 
         const data_length = data.length;
 
@@ -457,7 +533,11 @@ class Grid {
 
             //console.log(dir);
 
-            const p = new Polygon(new Vec(x, y), 8, this.cell_size/5, color, dir);
+            const size = this.cell_size / 4.5; //* (0.5 + Math.random());
+
+            const p = new Polygon(new Vec(x, y), 8, 
+                size,//this.cell_size/5, 
+                color, dir);
 
             // extra polygon
 
