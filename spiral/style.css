@@ -59,13 +59,18 @@ rect:hover {
 
 line {
     stroke: transparent;
-    transform: translate(-120px, 0);
+    stroke-width: 3px;
     transition: stroke .2s, transform .4s;
 }
 
-rect:hover + line {
+.line-top { transform: translate(-120px, 0); }
+.line-bottom { transform: translate(120px, 0); }
+.line-left { transform: translate(0,-120px); }
+.line-right { transform: translate(0, 120px); }
+
+g:hover line {
     transform: translate(0,0);
-    stroke: blue;
+    stroke: #333;
 }
 
 
