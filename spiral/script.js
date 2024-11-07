@@ -162,9 +162,14 @@ class Grid {
 
     }
 
-    build_grid_overlay(svg) {
+    build_grid_overlay(svg, extdata) {
+
+        const data_length = extdata.length;
 
         this.grid.forEach( (cell, index) => {
+
+            /// reversing the spiral
+            const datapoint = extdata[data_length - 1 - index];
 
             const i = index % this.L;
             const j = Math.floor( index / this.L );
@@ -210,10 +215,11 @@ class Grid {
             line_right.classList.add("line-right");
             line_left.classList.add("line-left");
 
-
-
             const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
 
+            g.dataset.year = datapoint.year;
+            g.dataset.value = datapoint.value;
+            g.dataset.pandemia = datapoint.pandemia;
 
             g.appendChild(sq);
 
@@ -379,8 +385,8 @@ class Grid {
 
                 /// reversing the spiral
                 const cat = data[data_length - 1 - index];
-                let color = color_table[cat];
-                //let color = data_colors[data_length - 1 - index];
+                //let color = color_table[cat]; // cores categóricas
+                let color = data_colors[data_length - 1 - index]; // cores contínuas
 
                 const i = pair[0];
                 const j = pair[1];
@@ -515,9 +521,9 @@ class Grid {
 
         this.drawing_sequence.forEach( (s, index) => {
 
-            //let color = data_colors[data.length - 1 - index];
+            let color = data_colors[data.length - 1 - index]; // cores contínuas
             const cat = data[data_length - 1 - index];
-            let color = color_table[cat];
+            //let color = color_table[cat]; // cores categóricas
 
             const pair = s.pair;
 
@@ -535,7 +541,7 @@ class Grid {
 
             const size = this.cell_size / 4.5; //* (0.5 + Math.random());
 
-            const p = new Polygon(new Vec(x, y), 8, 
+            const p = new Polygon(new Vec(x, y), 10, 
                 size,//this.cell_size/5, 
                 color, dir);
 
@@ -571,6 +577,19 @@ while (index_data < new_n) {
     grid.fill_sequence(seq);
     //console.log(index_data, spiral_n);
 }
+
+fetch("../result.json").then(response => response.json()).then(resdata => {
+    console.log(resdata);
+
+    resdata = resdata.slice(n - new_n, n);
+
+    grid.build_grid_overlay(svg, resdata)
+
+    
+
+
+
+})
 
 //grid.draw_with_blotches()
 
