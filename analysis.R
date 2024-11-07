@@ -86,6 +86,7 @@ ggplot(result, aes(x = year, y = month_name, fill = -value))+
   scale_fill_continuous_diverging(palette = "Blue-Red") +
   theme_minimal()
 
+# hmm interessante
 ggplot(result, aes(
   x = month_name, 
   y = year, 
@@ -144,22 +145,25 @@ ggplot(reslt_acum %>% filter(Date <= as.Date("2023-12-31"))) +
            xmin = lubridate::ymd("2020/02/01"),
            xmax = lubridate::ymd("2021/07/01"),
            ymin = 0, ymax = value_fev_2020,
-           alpha = 0, color = "#B54B47", fill = "transparent"
+           alpha = 0, color = "tomato", fill = "transparent" ##B54B47
   ) +
-  geom_vline(data = mudancas_governo, aes(xintercept = dates), size = .7, linetype = "dotted", color = "#B58A47") +
-  annotate(geom = "text", x = as.Date("2020-02-01"), y = value_fev_2020 + 5e4, hjust = "left", vjust = "bottom", label = "Pandemia", family = "Work Sans", size = 3, color = "#B54B47") + 
+  geom_vline(data = mudancas_governo, aes(xintercept = dates), size = .7, linetype = "dotted", color = "gray") + ##B58A47
+  annotate(geom = "text", x = as.Date("2020-02-01"), y = value_fev_2020 + 5e4, hjust = "left", vjust = "bottom", label = "Pandemia", family = "Work Sans", size = 3, color = "tomato") + 
   scale_x_date(date_breaks = "2 years", date_labels = "%Y") +
-  labs(x = NULL, y = NULL, title = "Resultado primário acumulado: 1997 a 2023", subtitle = "R$ trilhões - valores a preços de junho de 2024 - IPCA", caption = "Fonte: STN / Série Histórica do Resultado do Tesouro Nacional, tabela 1.1-A, junho de 2024") +
+  labs(x = NULL, y = NULL, title = "Resultado primário acumulado: 1997 a 2024", subtitle = "R$ trilhões - valores a preços de agosto de 2024 - IPCA", caption = "Fonte: STN / Série Histórica do Resultado do Tesouro Nacional, tabela 1.1-A, agosto de 2024") +
   scale_y_continuous(labels = function(x) {format(x/1000000, big.mark = ".", decimal.mark = ",")}) +
   theme_minimal() +
   theme(
     text = element_text(family = "Work Sans"),
     panel.grid.minor = element_blank(),
     panel.grid.major.x = element_blank(),
+    axis.ticks.x = element_line(),
     plot.title = element_text(face = "bold"),
-    plot.caption = element_text(face = "italic"))
+    plot.caption = element_text(face = "italic"),
+    plot.background = element_rect(fill = "floralwhite")#rgb(245/255,240/255,230/255)
+    )
 
-ggsave("acumulado.png", width = 8.5, height = 5, bg = "white")
+ggsave("acumulado.png", width = 10, height = 6, bg = "white")
 
 ggplot(reslt_acum) +
   #geom_area(aes(x = Date, y = tot, color = tot > 0)) +
@@ -169,7 +173,7 @@ ggplot(reslt_acum) +
   geom_col(aes(x = Date, y = ifelse(tot12m <= 0, tot12m, 0)), fill = "red") + 
   #linerange fica legal tb
   scale_x_date(date_breaks = "2 years", date_labels = "%Y") +
-  labs(x = NULL, y = NULL, title = "Resultado primário acumulado (trilhões de R$") +
+  labs(x = NULL, y = NULL, title = "Resultado primário acumulado 12m (trilhões de R$") +
   scale_y_continuous(labels = function(x) {format(x/1000000, big.mark = ".", decimal.mark = ",")})
 
 
@@ -185,6 +189,14 @@ ggplot(reslt_acum) +
   labs(x = NULL, y = NULL, title = "Resultado primário acumulado (trilhões de R$") +
   scale_y_continuous(labels = function(x) {format(x/1000000, big.mark = ".", decimal.mark = ",")})
 
+
+result_export <- result %>%
+  mutate(pandemia = ifelse(
+    Date > lubridate::ymd("2020/02/01") & Date < lubridate::ymd("2021/07/01"), "Pandemia", ""
+  )) %>%
+  select(-Date)
+
+jsonlite::write_json(result_export, "result.json")
 
 
 # PIB ---------------------------------------------------------------------
