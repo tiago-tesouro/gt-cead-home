@@ -50,9 +50,8 @@ rect {
     transition: stroke .2s;
 }
 
-rect:hover {
-    /*stroke: black;*/
-    /*transform: rotate(0) scale(0.6);*/
+rect.highlight {
+    stroke: hotpink;
 
 
 }

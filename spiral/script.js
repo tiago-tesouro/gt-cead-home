@@ -166,13 +166,17 @@ class Grid {
 
         const data_length = extdata.length;
 
-        this.grid.forEach( (cell, index) => {
+        this.drawing_sequence.forEach( (cell, index) => {
 
             /// reversing the spiral
             const datapoint = extdata[data_length - 1 - index];
 
-            const i = index % this.L;
-            const j = Math.floor( index / this.L );
+            const pair = cell.pair;
+
+            const i = pair[0];
+            const j = pair[1];
+            //const i = index % this.L;
+            //const j = Math.floor( index / this.L );
 
             const x = i * this.cell_size;
             const y = j * this.cell_size;
@@ -583,9 +587,36 @@ fetch("../result.json").then(response => response.json()).then(resdata => {
 
     resdata = resdata.slice(n - new_n, n);
 
-    grid.build_grid_overlay(svg, resdata)
+    grid.build_grid_overlay(svg, resdata);
+
+    const rects = document.querySelectorAll("rect");
+
+    svg.addEventListener("mouseover", function(e) {
+
+        //console.log(e);
+
+        if (e.target.tagName == "rect") {
+
+            const data = e.target.parentElement.dataset;
+            const year = data.year;
+
+            rects.forEach(rect => {
+
+                if (rect.parentElement.dataset.year == year) {
+                    rect.classList.add("highlight");
+                } else {rect.classList.remove("highlight")}
+
+            });
+
+            
+
 
     
+            
+        }
+
+    })
+
 
 
 
