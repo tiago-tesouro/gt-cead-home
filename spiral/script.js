@@ -222,8 +222,11 @@ class Grid {
             const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
 
             g.dataset.year = datapoint.year;
+            g.dataset.month = datapoint.month;
             g.dataset.value = datapoint.value;
             g.dataset.pandemia = datapoint.pandemia;
+            g.dataset.i = i;
+            g.dataset.j = j;
 
             g.appendChild(sq);
 
@@ -587,38 +590,102 @@ fetch("../result.json").then(response => response.json()).then(resdata => {
 
     resdata = resdata.slice(n - new_n, n);
 
+    grid.draw_with_blotches();
+    grid.draw_watercolors();
     grid.build_grid_overlay(svg, resdata);
 
+
     const rects = document.querySelectorAll("rect");
+    const tt = document.querySelector(".tooltip");
+    const tt_width = +getComputedStyle(tt).width.slice(0,-2);
+    const tt_height = +getComputedStyle(tt).height.slice(0,-2);
+
+    //console.log(tt);
+
+    let last_target_year;
+
+    const meses = [
+        "Janeiro",
+        "Fevereiro",
+        "Março",
+        "Abril",
+        "Maio",
+        "Junho",
+        "Julho",
+        "Agosto",
+        "Setembro",
+        "Outubro",
+        "Novembro",
+        "Dezembro"
+    ];
+
+    const formata = new Intl.NumberFormat('pt-BR', {
+        style: 'decimal',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+      });
 
     svg.addEventListener("mouseover", function(e) {
-
-        //console.log(e);
 
         if (e.target.tagName == "rect") {
 
             const data = e.target.parentElement.dataset;
             const year = data.year;
+            const month = data.month;
+            const pand = data.pandemia;
+            const value = data.value;
+            const i = data.i;
+            const j = data.j;
 
-            rects.forEach(rect => {
+            console.log(data);
 
-                if (rect.parentElement.dataset.year == year) {
-                    rect.classList.add("highlight");
-                } else {rect.classList.remove("highlight")}
+            // mostra e posiciona o tooltip
+            tt.classList.add("active");
+            let x = i * grid.cell_size / res + grid.cell_size / res + 10;
+            let y = j * grid.cell_size / res + grid.cell_size / res + 10;
+        
+            if  ((x + tt_width) > W / res) x = i * grid.cell_size / res - tt_width - 10;
+            if  ((y + tt_width) > H / res) y = j * grid.cell_size / res - tt_height - 10;
 
-            });
+            tt.style.transform = `translate(${x}px, ${y}px)`;
 
+            document.querySelector(".tt-periodo").innerHTML = meses[month-1] + ' de ' + year;
+            document.querySelector(".tt-resultado").innerHTML = formata.format(value) + ' bilhões';
+            document.querySelector(".tt-resultado").style.color = 
+                value < 0 ?
+                "crimson" :
+                "steelblue";
+
+            document.querySelector(".tt-pandemia").innerHTML = pand;
             
 
+            if (last_target_year != year) {
 
+                // destaca os quadradinhos do ano
+                rects.forEach(rect => {
+
+                    if (rect.parentElement.dataset.year == year) {
+                        rect.classList.add("highlight");
+                    } else {rect.classList.remove("highlight")}
     
-            
+                });
+
+            }
+
+        } else {
+
+            tt.classList.remove("active");
+
         }
 
-    })
+    });
 
-
-
+    svg.addEventListener("mouseout", function(e) {
+        rects.forEach(
+            rect => rect.classList.remove("highlight")
+        )
+        tt.classList.remove("active");
+    });
 
 })
 

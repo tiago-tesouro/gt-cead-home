@@ -46,12 +46,14 @@ rect {
     fill: transparent;
     stroke: transparent;
     stroke-width: 2;
+    stroke: gray;
+    opacity: 0;
     /*transform: rotate(145deg) scale(1.5);*/
-    transition: stroke .2s;
+    transition: opacity .3s;
 }
 
 rect.highlight {
-    stroke: hotpink;
+    opacity: 0.2;
 
 
 }
@@ -76,4 +78,37 @@ g:hover line {
 
 .overlay {
     z-index: 1;
+}
+
+.tooltip {
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: .7rem;
+    width: 250px;
+    padding: 1em;
+    border: 2px solid #333;
+    box-shadow: 2px 2px gray;
+    opacity: 0;
+    transition: opacity .3s;
+    background-color: rgba(255, 250, 240, 0.8)
+}
+
+.tooltip p {
+    margin: 0;
+}
+
+.tooltip.active {
+    opacity: 1;
+}
+
+.tt-pandemia {
+    background-color: firebrick;
+    color: white;
+    border-radius: 5px;
+    padding: 0.2em;
+}
+
+.tooltip .p-tt-pandemia {
+    margin-top: 1em;
 }
