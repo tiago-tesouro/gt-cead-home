@@ -363,6 +363,13 @@ class Grid {
 
             }
 
+            if (dir == "none") {
+
+                x = x0 + (comb[0] - 0.5);
+                y = y0 + (comb[1] - 0.5);
+
+            }
+
             r = this.cell_size * (comb[2] * 1 + 0.3) / 6; // quero que o raio varie entre 0.3 e 1, e nAão 0 e 1;
 
             this.draw_single_blotch(x, y, r, color);
@@ -401,7 +408,12 @@ class Grid {
                 const x0 = i * this.cell_size + this.cell_size / 2;
                 const y0 = j * this.cell_size + this.cell_size / 2;
 
-                const dir = this.drawing_sequence[index + 1].direction;
+                //const dir = this.drawing_sequence[index + 1].direction;
+
+                let dir = index + 1 == this.drawing_sequence.length 
+                    ? "none"
+                    : this.drawing_sequence[index + 1].direction
+                ;
 
                 this.draw_blotches(x0, y0, dir, color, 20);
 
@@ -636,8 +648,6 @@ fetch("../result.json").then(response => response.json()).then(resdata => {
             const value = data.value;
             const i = data.i;
             const j = data.j;
-
-            console.log(data);
 
             // mostra e posiciona o tooltip
             tt.classList.add("active");
