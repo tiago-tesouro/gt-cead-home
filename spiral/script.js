@@ -660,7 +660,7 @@ fetch("../result.json").then(response => response.json()).then(resdata => {
             tt.style.transform = `translate(${x}px, ${y}px)`;
 
             document.querySelector(".tt-periodo").innerHTML = meses[month-1] + ' de ' + year;
-            document.querySelector(".tt-resultado").innerHTML = formata.format(value) + ' bilhões';
+            document.querySelector(".tt-resultado").innerHTML = formata.format(value) + ' milhões';
             document.querySelector(".tt-resultado").style.color = 
                 value < 0 ?
                 "crimson" :

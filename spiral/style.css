@@ -105,10 +105,8 @@ g:hover line {
 .tt-pandemia {
     background-color: firebrick;
     color: white;
-    border-radius: 5px;
-    padding: 0.2em;
 }
 
 .tooltip .p-tt-pandemia {
-    margin-top: 1em;
+    line-height: 1.5;
 }
