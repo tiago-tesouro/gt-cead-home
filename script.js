@@ -116,7 +116,7 @@ function animate(timeStamp) {
 
     if (timer > nextFrame) {
 
-        ctx.fillStyle = "rgba(255, 255, 255, 0.1)";
+        ctx.fillStyle = "rgba(255, 255, 255, 0.1)"; //"rgba(255, 250, 240, 0.1)";// 
         //ctx.globalAlpha = 0.1
         ctx.fillRect(0, 0, cv.width, cv.height);
         //ctx.globalAlpha = 1;

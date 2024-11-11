@@ -44,11 +44,15 @@ let n = data.length;
 let index_data = 0;
 let spiral_n = 0;
 
+/*
 const L = Math.floor( Math.sqrt(n) );
 const new_n = L * L;
+*/
 
+/*
 data = data.slice(n - new_n, n);
 data_colors = data_colors.slice(n - new_n, n);
+*/
 
 let k = 0;
 
@@ -76,7 +80,7 @@ values.forEach( (cat, index) => color_table[cat] = colors[index]);
 
 let i_dir = 0;
 
-function get_next_sequence(
+function get_next_sequence(L
     //spiral_n
     ) {
 
@@ -589,18 +593,22 @@ ctx.fillStyle = "#111";//"floralwhite";
 //ctx.fillStyle = "#333";
 //ctx.fillRect(0, 0, W, H);
 
-const grid = new Grid(L);
-
-while (index_data < new_n) {
-    const seq = get_next_sequence();
-    grid.fill_sequence(seq);
-    //console.log(index_data, spiral_n);
-}
-
 fetch("../result.json").then(response => response.json()).then(resdata => {
     console.log(resdata);
 
-    resdata = resdata.slice(n - new_n, n);
+    const len = resdata.length
+    const L = Math.floor( Math.sqrt(len) );
+    const new_n = L * L;
+
+    resdata = resdata.slice(len - new_n, len);
+
+    const grid = new Grid(L);
+
+    while (index_data < new_n) {
+        const seq = get_next_sequence(L);
+        grid.fill_sequence(seq);
+        //console.log(index_data, spiral_n);
+    }
 
     grid.draw_with_blotches();
     grid.draw_watercolors();

@@ -4,7 +4,7 @@
 
 :root {
     --color-grid: ghostwhite;
-    --color-bg-grid: rgba(255, 255, 255, 0.5);
+    --color-bg-grid: rgba(255, 255, 255, 0.1);
     --l: 25px;
     --l-1 : calc(var(--l) - 1px);
     --r: 0;
@@ -17,7 +17,7 @@ body {
     margin: 0;
     padding: 0;
     height: 100vh;
-    font-family: "Poppins";
+    font-family: "Work Sans";
     background-color: floralwhite;
 }
 
@@ -172,6 +172,10 @@ COVER
     min-height: 100vh;
     padding: 2rem 1rem;
 
+}
+
+#main p {
+    line-height: 1.3;
 }
 
 #main p, 
