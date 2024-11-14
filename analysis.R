@@ -4,6 +4,13 @@ library(lubridate)
 library(colorspace)
 library(extrafont)
 library(zoo)
+library(ckanr)
+
+loadfonts()
+
+recurso_TT <- resource_show(id="527ccdb1-3059-42f3-bf23-b5e3ab4c6dc6",
+                            url="http://www.tesourotransparente.gov.br/ckan")
+download.file(recurso_TT$url, destfile = "./data/sh-rtn.xlsx", mode = 'wb' )
 
 Sys.setlocale(locale = "pt-BR")
 #readxl::excel_sheets('./data/sh-rtn.xlsx')
@@ -35,8 +42,7 @@ ggplot(result, aes(x = Date, y = value)) +
 
 result_scaled <- (result$value - min(result$value)) / (max(result$value) - min(result$value))
 
-jsonlite::write_json(result_scaled, "result.json")
-
+#jsonlite::write_json(result_scaled, "result.json")
 
 ggplot(result) + geom_histogram(aes(x = value), bins = 100)
 ggplot(result) + geom_jitter(aes(x = value, y = 1, color = value)) + theme_minimal()
@@ -68,8 +74,8 @@ result_binned$colors <- color_scale(result_binned$value)
 
 ggplot(result_binned) + geom_tile(aes(x = month_name, y = year, fill = colors)) +  scale_fill_identity()
 
-jsonlite::write_json(result_binned$value_binned, "result-binned.json")
-jsonlite::write_json(result_binned$colors, "colors.json")
+#jsonlite::write_json(result_binned$value_binned, "result-binned.json")
+#jsonlite::write_json(result_binned$colors, "colors.json")
 
 
 
@@ -150,7 +156,7 @@ ggplot(reslt_acum %>% filter(Date <= as.Date("2023-12-31"))) +
   geom_vline(data = mudancas_governo, aes(xintercept = dates), size = .7, linetype = "dotted", color = "gray") + ##B58A47
   annotate(geom = "text", x = as.Date("2020-02-01"), y = value_fev_2020 + 5e4, hjust = "left", vjust = "bottom", label = "Pandemia", family = "Work Sans", size = 3, color = "tomato") + 
   scale_x_date(date_breaks = "2 years", date_labels = "%Y") +
-  labs(x = NULL, y = NULL, title = "Resultado primário acumulado: 1997 a 2024", subtitle = "R$ trilhões - valores a preços de agosto de 2024 - IPCA", caption = "Fonte: STN / Série Histórica do Resultado do Tesouro Nacional, tabela 1.1-A, agosto de 2024") +
+  labs(x = NULL, y = NULL, title = "Resultado primário acumulado: 1997 a 2024", subtitle = "R$ trilhões \u2014 valores a preços de setembro de 2024 \u2014 IPCA", caption = "Fonte: STN / Série Histórica do Resultado do Tesouro Nacional, tabela 1.1-A, setembro de 2024") +
   scale_y_continuous(labels = function(x) {format(x/1000000, big.mark = ".", decimal.mark = ",")}) +
   theme_minimal() +
   theme(
@@ -163,7 +169,38 @@ ggplot(reslt_acum %>% filter(Date <= as.Date("2023-12-31"))) +
     plot.background = element_rect(fill = "floralwhite")#rgb(245/255,240/255,230/255)
     )
 
-ggsave("acumulado.png", width = 10, height = 6, bg = "white")
+ggsave("acumulado-set.png", width = 25/3, height = 5, bg = "white", dpi = "print")
+
+ggplot(reslt_acum %>% 
+         filter(month == 12) %>%
+         mutate(new_date = lubridate::make_date(year = year, month = 1, day = 1))) +
+  # geom_text(data = mudancas_governo, aes(label = presidentes, x = dates), y = 250e3, size = 2.5, hjust = "left", nudge_x = 50, family = "Work Sans", vjust = "top") +
+  geom_col(aes(x = new_date, y = tot12m, fill = tot12m > 0), just = 0.5) +
+  # annotate(geom = "rect",
+  #          xmin = lubridate::ymd("2020/02/01"),
+  #          xmax = lubridate::ymd("2021/07/01"),
+  #          ymin = 0, ymax = value_fev_2020,
+  #          alpha = 0, color = "tomato", fill = "transparent" ##B54B47
+  # ) +
+  #geom_vline(data = mudancas_governo, aes(xintercept = dates), size = .7, linetype = "dotted", color = "gray") + ##B58A47
+  #annotate(geom = "text", x = as.Date("2020-02-01"), y = value_fev_2020 + 5e4, hjust = "left", vjust = "bottom", label = "Pandemia", family = "Work Sans", size = 3, color = "tomato") + 
+  scale_x_date(date_breaks = "2 years", date_labels = "%Y") +
+  scale_fill_manual(values = c("TRUE" = "steelblue", "FALSE" = "firebrick")) +
+  labs(x = NULL, y = NULL, title = "Resultado primário anual: 1997 a 2023", subtitle = "R$ bilhões \u2014 valores a preços de setembro de 2024 \u2014 IPCA", caption = "Fonte: STN / Série Histórica do Resultado do Tesouro Nacional, tabela 1.1-A, setembro de 2024") +
+  scale_y_continuous(labels = function(x) {format(x/1000, big.mark = ".", decimal.mark = ",")}) +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    text = element_text(family = "Work Sans"),
+    #panel.grid.minor.x = element_blank(),
+    #panel.grid.major.x = element_blank(),
+    axis.ticks.x = element_line(),
+    plot.title = element_text(face = "bold"),
+    plot.caption = element_text(face = "italic"),
+    plot.background = element_rect(fill = "floralwhite")#rgb(245/255,240/255,230/255)
+  )
+
+ggsave("mensal.png", width = 25/3, height = 5, bg = "white", dpi = "print")
 
 ggplot(reslt_acum) +
   #geom_area(aes(x = Date, y = tot, color = tot > 0)) +
