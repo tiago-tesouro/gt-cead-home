@@ -226,8 +226,7 @@ ggplot(reslt_acum) +
   labs(x = NULL, y = NULL, title = "Resultado primário acumulado (trilhões de R$") +
   scale_y_continuous(labels = function(x) {format(x/1000000, big.mark = ".", decimal.mark = ",")})
 
-
-result_export <- result %>%
+result_export <- result_binned %>% #pq result_binned tem as cores
   mutate(pandemia = ifelse(
     Date > lubridate::ymd("2020/02/01") & Date < lubridate::ymd("2021/07/01"), "Pandemia", ""
   )) %>%
