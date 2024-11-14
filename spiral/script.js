@@ -390,7 +390,7 @@ class Grid {
 
         //const colors = ["dodgerblue", "tomato", "hotpink", "goldenrod", "green"];
 
-        console.log(data)
+        //console.log(data)
 
         this.drawing_sequence.forEach( 
 
@@ -596,7 +596,7 @@ ctx.fillStyle = "#111";//"floralwhite";
 //ctx.fillRect(0, 0, W, H);
 
 fetch("../result.json").then(response => response.json()).then(resdata => {
-    console.log(resdata);
+    //console.log(resdata);
 
     const len = resdata.length
     const L = Math.floor( Math.sqrt(len) );
