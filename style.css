@@ -61,6 +61,7 @@ COVER
     --clip: circle(var(--r) at var(--x) var(--y));
     -webkit-clip-path: var(--clip);
     clip-path: var(--clip);
+    border: 2px solid #333;
 }
 
 .logo {
